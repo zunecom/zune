@@ -3,103 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debojyoti Dutta's Website</title>
+    <title>Welcome to Zune</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(10, 15, 25, 0.78), rgba(10, 15, 25, 0.78)), 
+                        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #f4f4f9;
             text-align: center;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .dark-mode {
-            background-color: #1a1a1a;
-            color: #f4f4f9;
+            box-sizing: border-box;
         }
         h1 {
-            color: #4CAF50;
-            margin-bottom: 5px;
-        }
-        .dark-mode h1 {
             color: #81C784;
-        }
-        .clock {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin: 10px 0;
-            color: #2196F3;
-        }
-        .dark-mode .clock {
-            color: #64B5F6;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
         p {
             font-size: 1.1rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        /* Top Navigation Bar */
+        .nav-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: rgba(20, 25, 38, 0.85);
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #f4f4f9;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-btn.active, .nav-btn:hover {
+            background: #388E3C;
+            color: white;
+        }
+        /* View Sections */
+        .page-section {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+        .page-section.active {
+            display: flex;
+        }
+        /* Responsive Dashboard Grid for PC and Mobile */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 20px;
         }
         .widget-card {
-            background: rgba(0, 0, 0, 0.04);
-            padding: 15px 20px;
+            background: rgba(20, 25, 38, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 20px;
             border-radius: 12px;
-            margin: 10px 0;
-            max-width: 380px;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: background 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
-        .dark-mode .widget-card {
-            background: rgba(255, 255, 255, 0.05);
+        /* Round Bengali Analog Clock */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .analog-clock {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
         textarea, input[type="text"] {
             width: 90%;
             padding: 8px;
             border-radius: 6px;
-            border: 1px solid #ccc;
-            font-family: inherit;
+            border: 1px solid #444;
+            font-family: 'Poppins', sans-serif;
             margin-bottom: 8px;
+            background: #161b22;
+            color: #fff;
         }
         textarea {
             height: 50px;
             resize: none;
-        }
-        .dark-mode textarea, .dark-mode input[type="text"] {
-            background: #2a2a2a;
-            color: #fff;
-            border-color: #444;
         }
         ul {
             list-style: none;
             padding: 0;
             margin: 0;
             text-align: left;
-            max-height: 120px;
+            max-height: 180px;
             overflow-y: auto;
+            width: 100%;
         }
         li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.03);
-            padding: 5px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
             margin-bottom: 4px;
             border-radius: 4px;
             font-size: 0.9rem;
         }
-        .dark-mode li {
-            background: rgba(255,255,255,0.05);
-        }
         .timer-display {
-            font-size: 1.6rem;
-            font-weight: bold;
-            margin: 8px 0;
-            color: #E91E63;
-        }
-        .dark-mode .timer-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 10px 0;
             color: #F48FB1;
         }
         .news-item {
@@ -107,15 +145,59 @@
             text-align: left;
             margin: 6px 0;
             padding-bottom: 6px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .dark-mode .news-item {
-            border-bottom-color: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
         }
         .news-item a:hover {
-            color: #4CAF50;
+            color: #81C784;
             text-decoration: underline;
         }
+        /* Shopping Hub Grid */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 30px;
+        }
+        .shop-btn {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s;
+            padding: 15px;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            font-family: 'Poppins', sans-serif;
+        }
+        .shop-btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            opacity: 0.95;
+        }
+        /* Brand Colors */
+        .flipkart { background-color: #2874f0; }
+        .amazon { background-color: #ff9900; color: #111; text-shadow: none; }
+        .meesho { background-color: #f43397; }
+        .myntra { background-color: #ff3f6c; }
+        .bigbasket { background-color: #84c225; color: #111; text-shadow: none; }
+        .swiggy { background-color: #fc8019; }
+        .zomato { background-color: #cb202d; }
+        .blinkit { background-color: #f8cb2e; color: #111; text-shadow: none; }
+        .zepto { background-color: #5e2ced; }
+        .bookmyshow { background-color: #c42430; }
+
         .btn-container {
             display: flex;
             gap: 10px;
@@ -127,141 +209,253 @@
             padding: 10px 18px;
             font-size: 0.95rem;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #388E3C;
             color: white;
             border: none;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: opacity 0.2s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
         }
         button:hover {
             opacity: 0.9;
         }
-        .dark-mode button {
-            background-color: #388E3C;
+        /* Footer Contact Info */
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            text-align: center;
+            background: rgba(20, 25, 38, 0.5);
+            border-radius: 12px;
+        }
+        footer a {
+            color: #81C784;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Hello, I'm Debojyoti Dutta! 👋</h1>
-    <p id="greeting">Welcome to my phone-hosted website.</p>
-    
-    <!-- Live Clock Display -->
-    <div class="clock" id="liveClock">00:00:00</div>
+    <h1>Welcome to Zune! 🇮🇳</h1>
+    <p id="greeting">Welcome to my website.</p>
 
-    <!-- Live Weather Feature -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🌤️ Live Weather</p>
-        <div id="weatherDisplay" style="font-size: 0.85rem; margin-bottom: 6px;">Fetching weather data...</div>
-        <button onclick="fetchWeather()" style="padding: 4px 10px; font-size: 0.75rem; background-color: #00BCD4;">Refresh Weather 🔄</button>
+    <!-- Top Navigation Switcher -->
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="switchPage('home')">🏠 Dashboard</button>
+        <button class="nav-btn" onclick="switchPage('shopping')">🛍️ Shopping Hub</button>
     </div>
 
-    <!-- ⚽ Live Football Widget (Expanded Space) -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">⚽ Live Football (OneFootball)</p>
-        <div id="footballTicker" style="max-height: 180px; overflow-y: auto;">
-            <div class="news-item">Loading football updates...</div>
+    <!-- PAGE 1: MAIN DASHBOARD -->
+    <div id="homePage" class="page-section active">
+        <!-- Round Classic Bengali Analog Clock -->
+        <div class="clock-container">
+            <svg class="analog-clock" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="92" fill="#141926" stroke="#64B5F6" stroke-width="4"/>
+                <text x="100" y="26" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">১২</text>
+                <text x="146" y="39" text-anchor="middle" fill="#ccc" font-size="14">১</text>
+                <text x="177" y="70" text-anchor="middle" fill="#ccc" font-size="14">২</text>
+                <text x="188" y="106" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">৩</text>
+                <text x="177" y="142" text-anchor="middle" fill="#ccc" font-size="14">৪</text>
+                <text x="146" y="173" text-anchor="middle" fill="#ccc" font-size="14">৫</text>
+                <text x="100" y="184" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">৬</text>
+                <text x="54" y="173" text-anchor="middle" fill="#ccc" font-size="14">৭</text>
+                <text x="23" y="142" text-anchor="middle" fill="#ccc" font-size="14">৮</text>
+                <text x="12" y="106" text-anchor="middle" fill="#fff" font-size="15" font-weight="bold">৯</text>
+                <text x="23" y="70" text-anchor="middle" fill="#ccc" font-size="14">১০</text>
+                <text x="54" y="39" text-anchor="middle" fill="#ccc" font-size="14">১১</text>
+                
+                <line id="hourHand" x1="100" y1="100" x2="100" y2="62" stroke="#fff" stroke-width="5" stroke-linecap="round" transform-origin="100 100"/>
+                <line id="minHand" x1="100" y1="100" x2="100" y2="44" stroke="#64B5F6" stroke-width="3.5" stroke-linecap="round" transform-origin="100 100"/>
+                <line id="secHand" x1="100" y1="100" x2="100" y2="35" stroke="#F48FB1" stroke-width="1.5" stroke-linecap="round" transform-origin="100 100"/>
+                <circle cx="100" cy="100" r="4" fill="#F48FB1"/>
+            </svg>
         </div>
-        <button onclick="fetchFootballNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #1976D2;">Refresh Football 🔄</button>
-    </div>
 
-    <!-- 🏏 Live Cricket Widget (Expanded Space) -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🏏 Live Cricket (Cricbuzz)</p>
-        <div id="cricketTicker" style="max-height: 180px; overflow-y: auto;">
-            <div class="news-item">Loading cricket updates...</div>
+        <div class="dashboard-grid">
+            <!-- Live Weather Feature -->
+            <div class="widget-card">
+                <div>
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🌤️ Live Weather</p>
+                    <div id="weatherDisplay" style="font-size: 0.85rem; margin-bottom: 10px;">Fetching weather data...</div>
+                </div>
+                <button onclick="fetchWeather()" style="padding: 6px 12px; font-size: 0.75rem; background-color: #00ACC1;">Refresh Weather 🔄</button>
+            </div>
+
+            <!-- ⚽ Live Football Widget -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">⚽ Live Football</p>
+                    <div id="footballTicker" style="max-height: 180px; overflow-y: auto; width: 100%;">
+                        <div class="news-item">Loading football updates...</div>
+                    </div>
+                </div>
+                <button onclick="fetchFootballNews()" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 10px; background-color: #1976D2;">Refresh Football 🔄</button>
+            </div>
+
+            <!-- 🏏 Live Cricket Widget -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🏏 Live Cricket</p>
+                    <div id="cricketTicker" style="max-height: 180px; overflow-y: auto; width: 100%;">
+                        <div class="news-item">Loading cricket updates...</div>
+                    </div>
+                </div>
+                <button onclick="fetchCricketNews()" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 10px; background-color: #E65100;">Refresh Cricket 🔄</button>
+            </div>
+
+            <!-- Real Live News Ticker Feature -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">📰 Live Regional News</p>
+                    <div id="newsTicker" style="max-height: 180px; overflow-y: auto; width: 100%;">
+                        <div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>
+                    </div>
+                </div>
+                <button onclick="fetchLiveNews()" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 10px; background-color: #546E7A;">Refresh News 🔄</button>
+            </div>
+
+            <!-- Password Generator Feature -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
+                    <div style="display: flex; gap: 5px; margin-bottom: 4px; justify-content: center;">
+                        <input type="text" id="passOutput" readonly style="font-family: monospace; font-size: 0.9rem; margin-bottom: 0;">
+                        <button onclick="generatePassword()" style="padding: 6px 10px; font-size: 0.8rem; background-color: #8E24AA;">Generate</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Random Quote Widget Feature -->
+            <div class="widget-card">
+                <p id="quote" style="font-style: italic; margin-bottom: 10px; font-size: 0.95rem;">"Code is like humor. When you have to explain it, it’s bad."</p>
+                <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem;">New Quote 💡</button>
+            </div>
+
+            <!-- Quick Notes Scratchpad Feature -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 2px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
+                    <p style="font-size: 0.75rem; color: #aaa; margin-bottom: 6px;">(Saved privately on your device)</p>
+                    <textarea id="userNote" placeholder="Type your private note here..."></textarea>
+                    <div>
+                        <button onclick="saveNote()" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
+                        <button onclick="clearNote()" style="background-color: #C62828; padding: 6px 12px; font-size: 0.85rem;">Clear</button>
+                    </div>
+                    <p id="saveStatus" style="font-size: 0.8rem; margin-top: 4px; color: #81C784;"></p>
+                </div>
+            </div>
+
+            <!-- Mini To-Do List Feature -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 2px; font-size: 0.95rem;">✅ Mini To-Do List</p>
+                    <p style="font-size: 0.75rem; color: #aaa; margin-bottom: 6px;">(Your personal tasks list)</p>
+                    <div style="display: flex; gap: 5px; margin-bottom: 6px; justify-content: center;">
+                        <input type="text" id="taskInput" placeholder="Add a new task...">
+                        <button onclick="addTask()" style="padding: 6px 12px; font-size: 0.85rem;">Add</button>
+                    </div>
+                    <ul id="taskList"></ul>
+                </div>
+            </div>
+
+            <!-- Pomodoro Focus Timer Feature -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 4px; font-size: 0.95rem;">⏱️ Pomodoro Focus Timer</p>
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                    <div>
+                        <button onclick="startTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #1E88E5;">Start</button>
+                        <button onclick="pauseTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #FB8C00;">Pause</button>
+                        <button onclick="resetTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #C62828;">Reset</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button onclick="fetchCricketNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #E65100;">Refresh Cricket 🔄</button>
-    </div>
 
-    <!-- Real Live News Ticker Feature (Expanded Space) -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📰 Live Regional News</p>
-        <div id="newsTicker" style="max-height: 180px; overflow-y: auto;">
-            <div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>
+        <!-- Interactive Button -->
+        <div class="btn-container">
+            <button onclick="makeInteractive()">Click Me!</button>
         </div>
-        <button onclick="fetchLiveNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #607D8B;">Refresh News 🔄</button>
+        <p id="message" style="margin-top: 15px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></p>
     </div>
 
-    <!-- Password Generator Feature -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
-        <div style="display: flex; gap: 5px; margin-bottom: 4px;">
-            <input type="text" id="passOutput" readonly style="font-family: monospace; font-size: 0.9rem; margin-bottom: 0;">
-            <button onclick="generatePassword()" style="padding: 6px 10px; font-size: 0.8rem; background-color: #9C27B0;">Generate</button>
-        </div>
-    </div>
-
-    <!-- Random Quote Widget Feature -->
-    <div class="widget-card">
-        <p id="quote" style="font-style: italic; margin-bottom: 10px; font-size: 0.95rem;">"Code is like humor. When you have to explain it, it’s bad."</p>
-        <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem;">New Quote 💡</button>
-    </div>
-
-    <!-- Quick Notes Scratchpad Feature (Private to each visitor) -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 2px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
-        <p style="font-size: 0.75rem; color: #666; margin-bottom: 6px;">(Saved privately on your device)</p>
-        <textarea id="userNote" placeholder="Type your private note here..."></textarea>
-        <div>
-            <button onclick="saveNote()" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
-            <button onclick="clearNote()" style="background-color: #e53935; padding: 6px 12px; font-size: 0.85rem;">Clear</button>
-        </div>
-        <p id="saveStatus" style="font-size: 0.8rem; margin-top: 4px; color: #4CAF50;"></p>
-    </div>
-
-    <!-- Mini To-Do List Feature (Private to each visitor) -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 2px; font-size: 0.95rem;">✅ Mini To-Do List</p>
-        <p style="font-size: 0.75rem; color: #666; margin-bottom: 6px;">(Your personal tasks list)</p>
-        <div style="display: flex; gap: 5px; margin-bottom: 6px;">
-            <input type="text" id="taskInput" placeholder="Add a new task...">
-            <button onclick="addTask()" style="padding: 6px 12px; font-size: 0.85rem;">Add</button>
-        </div>
-        <ul id="taskList"></ul>
-    </div>
-
-    <!-- Pomodoro Focus Timer Feature -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 4px; font-size: 0.95rem;">⏱️ Pomodoro Focus Timer</p>
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <div>
-            <button onclick="startTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #2196F3;">Start</button>
-            <button onclick="pauseTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #FF9800;">Pause</button>
-            <button onclick="resetTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #e53935;">Reset</button>
+    <!-- PAGE 2: SHOPPING HUB -->
+    <div id="shoppingPage" class="page-section">
+        <p style="margin-bottom: 25px;">Quick access to your favorite shopping and delivery platforms.</p>
+        <div class="hub-grid">
+            <a href="https://www.flipkart.com" target="_blank" rel="noopener noreferrer" class="shop-btn flipkart">Flipkart</a>
+            <a href="https://www.amazon.in" target="_blank" rel="noopener noreferrer" class="shop-btn amazon">Amazon India</a>
+            <a href="https://www.meesho.com" target="_blank" rel="noopener noreferrer" class="shop-btn meesho">Meesho</a>
+            <a href="https://www.myntra.com" target="_blank" rel="noopener noreferrer" class="shop-btn myntra">Myntra</a>
+            <a href="https://www.bigbasket.com" target="_blank" rel="noopener noreferrer" class="shop-btn bigbasket">BigBasket</a>
+            <a href="https://www.swiggy.com" target="_blank" rel="noopener noreferrer" class="shop-btn swiggy">Swiggy</a>
+            <a href="https://www.zomato.com" target="_blank" rel="noopener noreferrer" class="shop-btn zomato">Zomato</a>
+            <a href="https://www.blinkit.com" target="_blank" rel="noopener noreferrer" class="shop-btn blinkit">Blinkit</a>
+            <a href="https://www.zepto.com" target="_blank" rel="noopener noreferrer" class="shop-btn zepto">Zepto</a>
+            <a href="https://www.bookmyshow.com" target="_blank" rel="noopener noreferrer" class="shop-btn bookmyshow">BookMyShow</a>
         </div>
     </div>
 
-    <!-- Interactive Buttons -->
-    <div class="btn-container">
-        <button onclick="makeInteractive()">Click Me!</button>
-        <button onclick="toggleTheme()">Toggle Dark Mode 🌙</button>
-    </div>
-
-    <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+    <!-- Footer Contact Info -->
+    <footer>
+        <p style="margin-bottom: 5px; font-size: 0.95rem;">Contact Information</p>
+        <p style="margin-bottom: 0;">Email: <a href="mailto:debojyoti9545@gmail.com">debojyoti9545@gmail.com</a></p>
+    </footer>
 
     <script>
-        // Live Clock and Dynamic Greeting Logic
+        function switchPage(page) {
+            const homePage = document.getElementById("homePage");
+            const shoppingPage = document.getElementById("shoppingPage");
+            const buttons = document.querySelectorAll(".nav-btn");
+
+            buttons.forEach(btn => btn.classList.remove("active"));
+
+            if (page === 'home') {
+                homePage.classList.add("active");
+                shoppingPage.classList.remove("active");
+                buttons[0].classList.add("active");
+            } else {
+                shoppingPage.classList.add("active");
+                homePage.classList.remove("active");
+                buttons[1].classList.add("active");
+            }
+        }
+
         function updateClock() {
             const now = new Date();
             const hours = now.getHours();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById("liveClock").innerText = timeString;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
 
-            let greetingText = "Welcome to my phone-hosted website.";
+            const hourDeg = ((hours % 12) * 30) + (minutes * 0.5);
+            const minDeg = (minutes * 6) + (seconds * 0.1);
+            const secDeg = seconds * 6;
+
+            document.getElementById("hourHand").style.transform = `rotate(${hourDeg}deg)`;
+            document.getElementById("minHand").style.transform = `rotate(${minDeg}deg)`;
+            document.getElementById("secHand").style.transform = `rotate(${secDeg}deg)`;
+
+            let greetingText = "Welcome to my website.";
             if (hours < 12) {
-                greetingText = "🌅 Good Morning! Welcome to Debojyoti Dutta's site.";
+                greetingText = "🌅 Good Morning! Welcome to Zune.";
             } else if (hours < 18) {
-                greetingText = "☀️ Good Afternoon! Welcome to Debojyoti Dutta's site.";
+                greetingText = "☀️ Good Afternoon! Welcome to Zune.";
             } else {
-                greetingText = "🌙 Good Evening! Welcome to Debojyoti Dutta's site.";
+                greetingText = "🌙 Good Evening! Welcome to Zune.";
             }
             document.getElementById("greeting").innerText = greetingText;
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Live Weather API Logic (Open-Meteo)
         function fetchWeather() {
             const weatherDiv = document.getElementById("weatherDisplay");
             weatherDiv.innerHTML = "Fetching weather...";
@@ -306,26 +500,23 @@
             return "Fair 🌤️";
         }
 
-        // ⚽ Football News Integration (Showing up to 5 items)
+        let allFootballItems = [];
+        let allCricketItems = [];
+        let allNewsItems = [];
+
         function fetchFootballNews() {
             const container = document.getElementById("footballTicker");
             container.innerHTML = '<div class="news-item">Loading football updates...</div>';
             
             const rssUrl = "https://www.skysports.com/rss/12040";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.items && data.items.length > 0) {
-                        container.innerHTML = "";
-                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
-                            const item = data.items[i];
-                            const itemDiv = document.createElement("div");
-                            itemDiv.className = "news-item";
-                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
-                            container.appendChild(itemDiv);
-                        }
+                        allFootballItems = data.items;
+                        displayRandomFootball();
                     } else {
                         throw new Error("No data");
                     }
@@ -341,26 +532,32 @@
                 });
         }
 
-        // 🏏 Cricket News Integration (Showing up to 5 items)
+        function displayRandomFootball() {
+            const container = document.getElementById("footballTicker");
+            container.innerHTML = "";
+            const shuffled = [...allFootballItems].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < Math.min(5, shuffled.length); i++) {
+                const item = shuffled[i];
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "news-item";
+                itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                container.appendChild(itemDiv);
+            }
+        }
+
         function fetchCricketNews() {
             const container = document.getElementById("cricketTicker");
             container.innerHTML = '<div class="news-item">Loading cricket updates...</div>';
             
             const rssUrl = "https://www.cricbuzz.com/cb-editorial/rss/news";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.items && data.items.length > 0) {
-                        container.innerHTML = "";
-                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
-                            const item = data.items[i];
-                            const itemDiv = document.createElement("div");
-                            itemDiv.className = "news-item";
-                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
-                            container.appendChild(itemDiv);
-                        }
+                        allCricketItems = data.items;
+                        displayRandomCricket();
                     } else {
                         throw new Error("No data");
                     }
@@ -376,26 +573,32 @@
                 });
         }
 
-        // Real Live Bengali News Fetching Logic (Showing up to 5 items)
+        function displayRandomCricket() {
+            const container = document.getElementById("cricketTicker");
+            container.innerHTML = "";
+            const shuffled = [...allCricketItems].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < Math.min(5, shuffled.length); i++) {
+                const item = shuffled[i];
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "news-item";
+                itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                container.appendChild(itemDiv);
+            }
+        }
+
         function fetchLiveNews() {
             const container = document.getElementById("newsTicker");
             container.innerHTML = '<div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>';
             
             const rssUrl = "https://bengali.abplive.com/home/feed";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.items && data.items.length > 0) {
-                        container.innerHTML = "";
-                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
-                            const item = data.items[i];
-                            const itemDiv = document.createElement("div");
-                            itemDiv.className = "news-item";
-                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
-                            container.appendChild(itemDiv);
-                        }
+                        allNewsItems = data.items;
+                        displayRandomNews();
                     } else {
                         throw new Error("No items found");
                     }
@@ -411,7 +614,27 @@
                 });
         }
 
-        // Password Generator Logic
+        function displayRandomNews() {
+            const container = document.getElementById("newsTicker");
+            container.innerHTML = "";
+            const shuffled = [...allNewsItems].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < Math.min(5, shuffled.length); i++) {
+                const item = shuffled[i];
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "news-item";
+                itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                container.appendChild(itemDiv);
+            }
+        }
+
+        // Auto-update weather, sports, and news every 30 minutes
+        setInterval(() => {
+            fetchWeather();
+            fetchFootballNews();
+            fetchCricketNews();
+            fetchLiveNews();
+        }, 30 * 60 * 1000);
+
         function generatePassword() {
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
             let pass = "";
@@ -421,7 +644,6 @@
             document.getElementById("passOutput").value = pass;
         }
 
-        // Random Quote Generator Logic
         const quotes = [
             "Code is like humor. When you have to explain it, it’s bad. — Cory House",
             "Simplicity is the soul of efficiency. — Austin Freeman",
@@ -436,7 +658,6 @@
             document.getElementById("quote").innerText = `"${quotes[randomIndex]}"`;
         }
 
-        // Private User Scratchpad & To-Do Initialization (Per Device)
         let tasks = JSON.parse(localStorage.getItem("siteUserTasks")) || [];
 
         window.onload = function() {
@@ -465,13 +686,12 @@
             setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
         }
 
-        // To-Do List Logic (Per Device)
         function renderTasks() {
             const taskList = document.getElementById("taskList");
             taskList.innerHTML = "";
             tasks.forEach((task, index) => {
                 const li = document.createElement("li");
-                li.innerHTML = `<span>${task}</span> <button onclick="removeTask(${index})" style="background: #e53935; padding: 2px 6px; font-size: 0.75rem;">✕</button>`;
+                li.innerHTML = `<span>${task}</span> <button onclick="removeTask(${index})" style="background: #C62828; padding: 2px 6px; font-size: 0.75rem;">✕</button>`;
                 taskList.appendChild(li);
             });
         }
@@ -492,7 +712,6 @@
             renderTasks();
         }
 
-        // Pomodoro Timer Logic
         let timerInterval = null;
         let timeLeft = 1500;
         let isRunning = false;
@@ -533,11 +752,10 @@
         }
 
         function makeInteractive() {
-            document.getElementById("message").innerHTML = "🎉 Awesome! JavaScript is running live from Debojyoti Dutta's site!";
-        }
-
-        function toggleTheme() {
-            document.body.classList.toggle("dark-mode");
+            document.getElementById("message").innerHTML = `
+                🎉 Welcome to Zune! Proudly displaying the Indian Flag:<br>
+                <div style="font-size: 3.5rem; margin-top: 10px; letter-spacing: 5px;">🇮🇳</div>
+            `;
         }
     </script>
 </body>
