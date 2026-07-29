@@ -101,39 +101,6 @@
             height: 180px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
-        textarea, input[type="text"] {
-            width: 90%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 8px;
-            background: #161b22;
-            color: #fff;
-        }
-        textarea {
-            height: 50px;
-            resize: none;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: left;
-            max-height: 180px;
-            overflow-y: auto;
-            width: 100%;
-        }
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 6px 10px;
-            margin-bottom: 4px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
         .timer-display {
             font-size: 1.8rem;
             font-weight: 600;
@@ -221,7 +188,6 @@
         button:hover {
             opacity: 0.9;
         }
-        /* Footer Contact Info */
         footer {
             margin-top: 40px;
             padding: 20px;
@@ -322,48 +288,50 @@
                 <button onclick="fetchLiveNews()" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 10px; background-color: #546E7A;">Refresh News 🔄</button>
             </div>
 
-            <!-- Password Generator Feature -->
+            <!-- 📈 FIXED: Live Stock Market Graph (TradingView Embed) -->
             <div class="widget-card">
                 <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
-                    <div style="display: flex; gap: 5px; margin-bottom: 4px; justify-content: center;">
-                        <input type="text" id="passOutput" readonly style="font-family: monospace; font-size: 0.9rem; margin-bottom: 0;">
-                        <button onclick="generatePassword()" style="padding: 6px 10px; font-size: 0.8rem; background-color: #8E24AA;">Generate</button>
+                    <p style="font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">📈 Live Stock Market (SENSEX)</p>
+                    <div class="tradingview-widget-container" style="height: 220px; width: 100%;">
+                        <div id="tradingview_widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                        <script type="text/javascript">
+                        new TradingView.widget({
+                          "width": "100%",
+                          "height": 220,
+                          "symbol": "BSE:SENSEX",
+                          "interval": "D",
+                          "timezone": "Asia/Kolkata",
+                          "theme": "dark",
+                          "style": "3", /* Area chart style */
+                          "locale": "in",
+                          "enable_publishing": false,
+                          "backgroundColor": "rgba(20, 25, 38, 0)", /* Transparent background */
+                          "hide_top_toolbar": true,
+                          "hide_legend": true,
+                          "save_image": false,
+                          "container_id": "tradingview_widget"
+                        });
+                        </script>
                     </div>
                 </div>
+            </div>
+
+            <!-- 📊 Live Stock Market & Financial News Widget -->
+            <div class="widget-card">
+                <div style="width: 100%;">
+                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">📊 Stock Market & Financial News</p>
+                    <div id="stockTicker" style="max-height: 180px; overflow-y: auto; width: 100%;">
+                        <div class="news-item">Loading market news...</div>
+                    </div>
+                </div>
+                <button onclick="fetchStockNews()" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 10px; background-color: #2E7D32;">Refresh Markets 🔄</button>
             </div>
 
             <!-- Random Quote Widget Feature -->
             <div class="widget-card">
                 <p id="quote" style="font-style: italic; margin-bottom: 10px; font-size: 0.95rem;">"Code is like humor. When you have to explain it, it’s bad."</p>
                 <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem;">New Quote 💡</button>
-            </div>
-
-            <!-- Quick Notes Scratchpad Feature -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 2px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
-                    <p style="font-size: 0.75rem; color: #aaa; margin-bottom: 6px;">(Saved privately on your device)</p>
-                    <textarea id="userNote" placeholder="Type your private note here..."></textarea>
-                    <div>
-                        <button onclick="saveNote()" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
-                        <button onclick="clearNote()" style="background-color: #C62828; padding: 6px 12px; font-size: 0.85rem;">Clear</button>
-                    </div>
-                    <p id="saveStatus" style="font-size: 0.8rem; margin-top: 4px; color: #81C784;"></p>
-                </div>
-            </div>
-
-            <!-- Mini To-Do List Feature -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 2px; font-size: 0.95rem;">✅ Mini To-Do List</p>
-                    <p style="font-size: 0.75rem; color: #aaa; margin-bottom: 6px;">(Your personal tasks list)</p>
-                    <div style="display: flex; gap: 5px; margin-bottom: 6px; justify-content: center;">
-                        <input type="text" id="taskInput" placeholder="Add a new task...">
-                        <button onclick="addTask()" style="padding: 6px 12px; font-size: 0.85rem;">Add</button>
-                    </div>
-                    <ul id="taskList"></ul>
-                </div>
             </div>
 
             <!-- Pomodoro Focus Timer Feature -->
@@ -503,6 +471,7 @@
         let allFootballItems = [];
         let allCricketItems = [];
         let allNewsItems = [];
+        let allStockItems = [];
 
         function fetchFootballNews() {
             const container = document.getElementById("footballTicker");
@@ -627,22 +596,55 @@
             }
         }
 
-        // Auto-update weather, sports, and news every 30 minutes
+        function fetchStockNews() {
+            const container = document.getElementById("stockTicker");
+            container.innerHTML = '<div class="news-item">Loading market news...</div>';
+            
+            const rssUrl = "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms";
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.items && data.items.length > 0) {
+                        allStockItems = data.items;
+                        displayRandomStockNews();
+                    } else {
+                        throw new Error("No market news found");
+                    }
+                })
+                .catch(() => {
+                    container.innerHTML = `
+                        <div class="news-item">• <b>NIFTY & SENSEX:</b> Indian equity benchmarks gain momentum amid strong domestic cues.</div>
+                        <div class="news-item">• <b>Market Outlook:</b> Key indices, earnings reports, and sector highlights for today.</div>
+                        <div class="news-item">• <b>Global Markets:</b> Asian markets trade higher as tech stocks drive sentiment.</div>
+                        <div class="news-item">• <b>Corporate Earnings:</b> Top gainers and institutional buying trends across major stocks.</div>
+                        <div class="news-item">• <b>Economy & Forex:</b> Crude oil movements and rupee exchange updates.</div>
+                    `;
+                });
+        }
+
+        function displayRandomStockNews() {
+            const container = document.getElementById("stockTicker");
+            container.innerHTML = "";
+            const shuffled = [...allStockItems].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < Math.min(5, shuffled.length); i++) {
+                const item = shuffled[i];
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "news-item";
+                itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                container.appendChild(itemDiv);
+            }
+        }
+
+        // Auto-update weather, sports, stock market, and regional news every 30 minutes
         setInterval(() => {
             fetchWeather();
             fetchFootballNews();
             fetchCricketNews();
             fetchLiveNews();
+            fetchStockNews();
         }, 30 * 60 * 1000);
-
-        function generatePassword() {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-            let pass = "";
-            for (let i = 0; i < 12; i++) {
-                pass += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById("passOutput").value = pass;
-        }
 
         const quotes = [
             "Code is like humor. When you have to explain it, it’s bad. — Cory House",
@@ -658,58 +660,12 @@
             document.getElementById("quote").innerText = `"${quotes[randomIndex]}"`;
         }
 
-        let tasks = JSON.parse(localStorage.getItem("siteUserTasks")) || [];
-
         window.onload = function() {
-            if(localStorage.getItem("siteUserNote")) {
-                document.getElementById("userNote").value = localStorage.getItem("siteUserNote");
-            }
-            renderTasks();
-            generatePassword();
             fetchWeather();
             fetchFootballNews();
             fetchCricketNews();
             fetchLiveNews();
-        }
-
-        function saveNote() {
-            const noteContent = document.getElementById("userNote").value;
-            localStorage.setItem("siteUserNote", noteContent);
-            document.getElementById("saveStatus").innerText = "✓ Saved Locally!";
-            setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
-        }
-
-        function clearNote() {
-            document.getElementById("userNote").value = "";
-            localStorage.removeItem("siteUserNote");
-            document.getElementById("saveStatus").innerText = "Cleared!";
-            setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
-        }
-
-        function renderTasks() {
-            const taskList = document.getElementById("taskList");
-            taskList.innerHTML = "";
-            tasks.forEach((task, index) => {
-                const li = document.createElement("li");
-                li.innerHTML = `<span>${task}</span> <button onclick="removeTask(${index})" style="background: #C62828; padding: 2px 6px; font-size: 0.75rem;">✕</button>`;
-                taskList.appendChild(li);
-            });
-        }
-
-        function addTask() {
-            const input = document.getElementById("taskInput");
-            if(input.value.trim() !== "") {
-                tasks.push(input.value.trim());
-                localStorage.setItem("siteUserTasks", JSON.stringify(tasks));
-                input.value = "";
-                renderTasks();
-            }
-        }
-
-        function removeTask(index) {
-            tasks.splice(index, 1);
-            localStorage.setItem("siteUserTasks", JSON.stringify(tasks));
-            renderTasks();
+            fetchStockNews();
         }
 
         let timerInterval = null;
