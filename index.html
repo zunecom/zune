@@ -145,6 +145,13 @@
     <!-- Live Clock Display -->
     <div class="clock" id="liveClock">00:00:00</div>
 
+    <!-- Live Weather Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🌤️ Live Weather</p>
+        <div id="weatherDisplay" style="font-size: 0.85rem; margin-bottom: 6px;">Fetching weather data...</div>
+        <button onclick="fetchWeather()" style="padding: 4px 10px; font-size: 0.75rem; background-color: #00BCD4;">Refresh Weather 🔄</button>
+    </div>
+
     <!-- Password Generator Feature -->
     <div class="widget-card">
         <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
@@ -171,10 +178,11 @@
         <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem;">New Quote 💡</button>
     </div>
 
-    <!-- Quick Notes Scratchpad Feature -->
+    <!-- Quick Notes Scratchpad Feature (Private to each visitor) -->
     <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
-        <textarea id="userNote" placeholder="Type a quick note here..."></textarea>
+        <p style="font-weight: bold; margin-bottom: 2px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
+        <p style="font-size: 0.75rem; color: #666; margin-bottom: 6px;">(Saved privately on your device)</p>
+        <textarea id="userNote" placeholder="Type your private note here..."></textarea>
         <div>
             <button onclick="saveNote()" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
             <button onclick="clearNote()" style="background-color: #e53935; padding: 6px 12px; font-size: 0.85rem;">Clear</button>
@@ -182,9 +190,10 @@
         <p id="saveStatus" style="font-size: 0.8rem; margin-top: 4px; color: #4CAF50;"></p>
     </div>
 
-    <!-- Mini To-Do List Feature -->
+    <!-- Mini To-Do List Feature (Private to each visitor) -->
     <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">✅ Mini To-Do List</p>
+        <p style="font-weight: bold; margin-bottom: 2px; font-size: 0.95rem;">✅ Mini To-Do List</p>
+        <p style="font-size: 0.75rem; color: #666; margin-bottom: 6px;">(Your personal tasks list)</p>
         <div style="display: flex; gap: 5px; margin-bottom: 6px;">
             <input type="text" id="taskInput" placeholder="Add a new task...">
             <button onclick="addTask()" style="padding: 6px 12px; font-size: 0.85rem;">Add</button>
@@ -232,6 +241,51 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Live Weather API Logic (Open-Meteo)
+        function fetchWeather() {
+            const weatherDiv = document.getElementById("weatherDisplay");
+            weatherDiv.innerHTML = "Fetching weather...";
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    getWeatherData(position.coords.latitude, position.coords.longitude);
+                }, () => {
+                    getWeatherData(22.57, 88.36);
+                });
+            } else {
+                getWeatherData(22.57, 88.36);
+            }
+        }
+
+        function getWeatherData(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const temp = data.current_weather.temperature;
+                    const windspeed = data.current_weather.windspeed;
+                    const condition = getWeatherCondition(data.current_weather.weathercode);
+                    
+                    document.getElementById("weatherDisplay").innerHTML = `
+                        <b>Temperature:</b> ${temp}°C | <b>Condition:</b> ${condition}<br>
+                        <b>Wind Speed:</b> ${windspeed} km/h
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById("weatherDisplay").innerHTML = "Unable to fetch weather data.";
+                });
+        }
+
+        function getWeatherCondition(code) {
+            if (code === 0) return "Clear sky ☀️";
+            if (code >= 1 && code <= 3) return "Partly cloudy ⛅";
+            if (code >= 45 && code <= 48) return "Foggy 🌫️";
+            if (code >= 51 && code <= 67) return "Rainy 🌧️";
+            if (code >= 71 && code <= 77) return "Snowy ❄️";
+            if (code >= 95) return "Thunderstorm ⛈️";
+            return "Fair 🌤️";
+        }
+
         // Password Generator Logic
         function generatePassword() {
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -276,32 +330,33 @@
             document.getElementById("quote").innerText = `"${quotes[randomIndex]}"`;
         }
 
-        // Quick Scratchpad & To-Do Initialization
-        let tasks = JSON.parse(localStorage.getItem("debojyotiTasks")) || [];
+        // Private User Scratchpad & To-Do Initialization (Per Device)
+        let tasks = JSON.parse(localStorage.getItem("siteUserTasks")) || [];
 
         window.onload = function() {
-            if(localStorage.getItem("debojyotiNote")) {
-                document.getElementById("userNote").value = localStorage.getItem("debojyotiNote");
+            if(localStorage.getItem("siteUserNote")) {
+                document.getElementById("userNote").value = localStorage.getItem("siteUserNote");
             }
             renderTasks();
             generatePassword();
+            fetchWeather();
         }
 
         function saveNote() {
             const noteContent = document.getElementById("userNote").value;
-            localStorage.setItem("debojyotiNote", noteContent);
-            document.getElementById("saveStatus").innerText = "✓ Saved!";
+            localStorage.setItem("siteUserNote", noteContent);
+            document.getElementById("saveStatus").innerText = "✓ Saved Locally!";
             setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
         }
 
         function clearNote() {
             document.getElementById("userNote").value = "";
-            localStorage.removeItem("debojyotiNote");
+            localStorage.removeItem("siteUserNote");
             document.getElementById("saveStatus").innerText = "Cleared!";
             setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
         }
 
-        // To-Do List Logic
+        // To-Do List Logic (Per Device)
         function renderTasks() {
             const taskList = document.getElementById("taskList");
             taskList.innerHTML = "";
@@ -316,7 +371,7 @@
             const input = document.getElementById("taskInput");
             if(input.value.trim() !== "") {
                 tasks.push(input.value.trim());
-                localStorage.setItem("debojyotiTasks", JSON.stringify(tasks));
+                localStorage.setItem("siteUserTasks", JSON.stringify(tasks));
                 input.value = "";
                 renderTasks();
             }
@@ -324,7 +379,7 @@
 
         function removeTask(index) {
             tasks.splice(index, 1);
-            localStorage.setItem("debojyotiTasks", JSON.stringify(tasks));
+            localStorage.setItem("siteUserTasks", JSON.stringify(tasks));
             renderTasks();
         }
 
@@ -369,7 +424,7 @@
         }
 
         function makeInteractive() {
-            document.getElementById("message").innerHTML = "🎉 Awesome! JavaScript is running live from Debojyoti Dutta's phone!";
+            document.getElementById("message").innerHTML = "🎉 Awesome! JavaScript is running live from Debojyoti Dutta's site!";
         }
 
         function toggleTheme() {
