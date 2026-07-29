@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debojyoti Dutta's Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f4f4f9;
+        }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        .dark-mode h1 {
+            color: #81C784;
+        }
+        .clock {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2196F3;
+        }
+        .dark-mode .clock {
+            color: #64B5F6;
+        }
+        p {
+            font-size: 1.1rem;
+        }
+        .widget-card {
+            background: rgba(0, 0, 0, 0.04);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 10px 0;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background 0.3s;
+        }
+        .dark-mode .widget-card {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        textarea, input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            margin-bottom: 8px;
+        }
+        textarea {
+            height: 50px;
+            resize: none;
+        }
+        .dark-mode textarea, .dark-mode input[type="text"] {
+            background: #2a2a2a;
+            color: #fff;
+            border-color: #444;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.03);
+            padding: 5px 8px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .dark-mode li {
+            background: rgba(255,255,255,0.05);
+        }
+        .timer-display {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #E91E63;
+        }
+        .dark-mode .timer-display {
+            color: #F48FB1;
+        }
+        .news-item {
+            font-size: 0.85rem;
+            text-align: left;
+            margin: 6px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .dark-mode .news-item {
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .dark-mode button {
+            background-color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, I'm Debojyoti Dutta! 👋</h1>
+    <p id="greeting">Welcome to my phone-hosted website.</p>
+    
+    <!-- Live Clock Display -->
+    <div class="clock" id="liveClock">00:00:00</div>
+
+    <!-- Password Generator Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
+        <div style="display: flex; gap: 5px; margin-bottom: 4px;">
+            <input type="text" id="passOutput" readonly style="font-family: monospace; font-size: 0.9rem; margin-bottom: 0;">
+            <button onclick="generatePassword()" style="padding: 6px 10px; font-size: 0.8rem; background-color: #9C27B0;">Generate</button>
+        </div>
+    </div>
+
+    <!-- Latest News Updates Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📰 Latest News Updates</p>
+        <div id="newsTicker" style="max-height: 90px; overflow-y: auto;">
+            <div class="news-item">• <b>Tech:</b> AI-driven mobile development platforms see massive growth.</div>
+            <div class="news-item">• <b>Web:</b> Hosting live services directly from mobile environments becomes mainstream.</div>
+            <div class="news-item">• <b>System:</b> Termux background server performance optimized successfully.</div>
+        </div>
+        <button onclick="rotateNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #607D8B;">Refresh News 🔄</button>
+    </div>
+
+    <!-- Random Quote Widget Feature -->
+    <div class="widget-card">
+        <p id="quote" style="font-style: italic; margin-bottom: 10px; font-size: 0.95rem;">"Code is like humor. When you have to explain it, it’s bad."</p>
+        <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem;">New Quote 💡</button>
+    </div>
+
+    <!-- Quick Notes Scratchpad Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📝 Quick Scratchpad</p>
+        <textarea id="userNote" placeholder="Type a quick note here..."></textarea>
+        <div>
+            <button onclick="saveNote()" style="padding: 6px 12px; font-size: 0.85rem;">Save</button>
+            <button onclick="clearNote()" style="background-color: #e53935; padding: 6px 12px; font-size: 0.85rem;">Clear</button>
+        </div>
+        <p id="saveStatus" style="font-size: 0.8rem; margin-top: 4px; color: #4CAF50;"></p>
+    </div>
+
+    <!-- Mini To-Do List Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">✅ Mini To-Do List</p>
+        <div style="display: flex; gap: 5px; margin-bottom: 6px;">
+            <input type="text" id="taskInput" placeholder="Add a new task...">
+            <button onclick="addTask()" style="padding: 6px 12px; font-size: 0.85rem;">Add</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <!-- Pomodoro Focus Timer Feature -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 4px; font-size: 0.95rem;">⏱️ Pomodoro Focus Timer</p>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div>
+            <button onclick="startTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #2196F3;">Start</button>
+            <button onclick="pauseTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #FF9800;">Pause</button>
+            <button onclick="resetTimer()" style="padding: 6px 12px; font-size: 0.85rem; background-color: #e53935;">Reset</button>
+        </div>
+    </div>
+
+    <!-- Interactive Buttons -->
+    <div class="btn-container">
+        <button onclick="makeInteractive()">Click Me!</button>
+        <button onclick="toggleTheme()">Toggle Dark Mode 🌙</button>
+    </div>
+
+    <p id="message" style="margin-top: 15px; font-weight: bold;"></p>
+
+    <script>
+        // Live Clock and Dynamic Greeting Logic
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById("liveClock").innerText = timeString;
+
+            let greetingText = "Welcome to my phone-hosted website.";
+            if (hours < 12) {
+                greetingText = "🌅 Good Morning! Welcome to Debojyoti Dutta's site.";
+            } else if (hours < 18) {
+                greetingText = "☀️ Good Afternoon! Welcome to Debojyoti Dutta's site.";
+            } else {
+                greetingText = "🌙 Good Evening! Welcome to Debojyoti Dutta's site.";
+            }
+            document.getElementById("greeting").innerText = greetingText;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Password Generator Logic
+        function generatePassword() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            let pass = "";
+            for (let i = 0; i < 12; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById("passOutput").value = pass;
+        }
+
+        // News Ticker Rotation Logic
+        const newsPool = [
+            "• <b>Tech:</b> AI-driven mobile development platforms see massive growth.",
+            "• <b>Web:</b> Hosting live services directly from mobile environments becomes mainstream.",
+            "• <b>System:</b> Termux background server performance optimized successfully.",
+            "• <b>Innovation:</b> Lightweight JavaScript widgets enhance static mobile web hosting.",
+            "• <b>Update:</b> Debojyoti Dutta's phone server running smoothly with zero downtime."
+        ];
+
+        function rotateNews() {
+            const container = document.getElementById("newsTicker");
+            let shuffled = [...newsPool].sort(() => 0.5 - Math.random());
+            container.innerHTML = `
+                <div class="news-item">${shuffled[0]}</div>
+                <div class="news-item">${shuffled[1]}</div>
+                <div class="news-item">${shuffled[2]}</div>
+            `;
+        }
+
+        // Random Quote Generator Logic
+        const quotes = [
+            "Code is like humor. When you have to explain it, it’s bad. — Cory House",
+            "Simplicity is the soul of efficiency. — Austin Freeman",
+            "Make it work, make it right, make it fast. — Kent Beck",
+            "Programs must be written for people to read, and only incidentally for machines to execute. — Harold Abelson",
+            "Talk is cheap. Show me the code. — Linus Torvalds",
+            "First, solve the problem. Then, write the code. — John Johnson"
+        ];
+
+        function getNewQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById("quote").innerText = `"${quotes[randomIndex]}"`;
+        }
+
+        // Quick Scratchpad & To-Do Initialization
+        let tasks = JSON.parse(localStorage.getItem("debojyotiTasks")) || [];
+
+        window.onload = function() {
+            if(localStorage.getItem("debojyotiNote")) {
+                document.getElementById("userNote").value = localStorage.getItem("debojyotiNote");
+            }
+            renderTasks();
+            generatePassword();
+        }
+
+        function saveNote() {
+            const noteContent = document.getElementById("userNote").value;
+            localStorage.setItem("debojyotiNote", noteContent);
+            document.getElementById("saveStatus").innerText = "✓ Saved!";
+            setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
+        }
+
+        function clearNote() {
+            document.getElementById("userNote").value = "";
+            localStorage.removeItem("debojyotiNote");
+            document.getElementById("saveStatus").innerText = "Cleared!";
+            setTimeout(() => { document.getElementById("saveStatus").innerText = ""; }, 2000);
+        }
+
+        // To-Do List Logic
+        function renderTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            tasks.forEach((task, index) => {
+                const li = document.createElement("li");
+                li.innerHTML = `<span>${task}</span> <button onclick="removeTask(${index})" style="background: #e53935; padding: 2px 6px; font-size: 0.75rem;">✕</button>`;
+                taskList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const input = document.getElementById("taskInput");
+            if(input.value.trim() !== "") {
+                tasks.push(input.value.trim());
+                localStorage.setItem("debojyotiTasks", JSON.stringify(tasks));
+                input.value = "";
+                renderTasks();
+            }
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            localStorage.setItem("debojyotiTasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // Pomodoro Timer Logic
+        let timerInterval = null;
+        let timeLeft = 1500;
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById("timerDisplay").innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        alert("Pomodoro session completed!");
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 1500;
+            updateTimerDisplay();
+        }
+
+        function makeInteractive() {
+            document.getElementById("message").innerHTML = "🎉 Awesome! JavaScript is running live from Debojyoti Dutta's phone!";
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
+</body>
+</html>
