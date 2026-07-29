@@ -77,7 +77,7 @@
             padding: 0;
             margin: 0;
             text-align: left;
-            max-height: 80px;
+            max-height: 120px;
             overflow-y: auto;
         }
         li {
@@ -111,6 +111,10 @@
         }
         .dark-mode .news-item {
             border-bottom-color: rgba(255,255,255,0.05);
+        }
+        .news-item a:hover {
+            color: #4CAF50;
+            text-decoration: underline;
         }
         .btn-container {
             display: flex;
@@ -152,6 +156,33 @@
         <button onclick="fetchWeather()" style="padding: 4px 10px; font-size: 0.75rem; background-color: #00BCD4;">Refresh Weather 🔄</button>
     </div>
 
+    <!-- ⚽ Live Football Widget (Expanded Space) -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">⚽ Live Football (OneFootball)</p>
+        <div id="footballTicker" style="max-height: 180px; overflow-y: auto;">
+            <div class="news-item">Loading football updates...</div>
+        </div>
+        <button onclick="fetchFootballNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #1976D2;">Refresh Football 🔄</button>
+    </div>
+
+    <!-- 🏏 Live Cricket Widget (Expanded Space) -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🏏 Live Cricket (Cricbuzz)</p>
+        <div id="cricketTicker" style="max-height: 180px; overflow-y: auto;">
+            <div class="news-item">Loading cricket updates...</div>
+        </div>
+        <button onclick="fetchCricketNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #E65100;">Refresh Cricket 🔄</button>
+    </div>
+
+    <!-- Real Live News Ticker Feature (Expanded Space) -->
+    <div class="widget-card">
+        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📰 Live Regional News</p>
+        <div id="newsTicker" style="max-height: 180px; overflow-y: auto;">
+            <div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>
+        </div>
+        <button onclick="fetchLiveNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #607D8B;">Refresh News 🔄</button>
+    </div>
+
     <!-- Password Generator Feature -->
     <div class="widget-card">
         <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">🔑 Password Generator</p>
@@ -159,17 +190,6 @@
             <input type="text" id="passOutput" readonly style="font-family: monospace; font-size: 0.9rem; margin-bottom: 0;">
             <button onclick="generatePassword()" style="padding: 6px 10px; font-size: 0.8rem; background-color: #9C27B0;">Generate</button>
         </div>
-    </div>
-
-    <!-- Latest News Updates Feature -->
-    <div class="widget-card">
-        <p style="font-weight: bold; margin-bottom: 6px; font-size: 0.95rem;">📰 Latest News Updates</p>
-        <div id="newsTicker" style="max-height: 90px; overflow-y: auto;">
-            <div class="news-item">• <b>Tech:</b> AI-driven mobile development platforms see massive growth.</div>
-            <div class="news-item">• <b>Web:</b> Hosting live services directly from mobile environments becomes mainstream.</div>
-            <div class="news-item">• <b>System:</b> Termux background server performance optimized successfully.</div>
-        </div>
-        <button onclick="rotateNews()" style="padding: 4px 10px; font-size: 0.75rem; margin-top: 6px; background-color: #607D8B;">Refresh News 🔄</button>
     </div>
 
     <!-- Random Quote Widget Feature -->
@@ -286,6 +306,111 @@
             return "Fair 🌤️";
         }
 
+        // ⚽ Football News Integration (Showing up to 5 items)
+        function fetchFootballNews() {
+            const container = document.getElementById("footballTicker");
+            container.innerHTML = '<div class="news-item">Loading football updates...</div>';
+            
+            const rssUrl = "https://www.skysports.com/rss/12040";
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.items && data.items.length > 0) {
+                        container.innerHTML = "";
+                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
+                            const item = data.items[i];
+                            const itemDiv = document.createElement("div");
+                            itemDiv.className = "news-item";
+                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                            container.appendChild(itemDiv);
+                        }
+                    } else {
+                        throw new Error("No data");
+                    }
+                })
+                .catch(() => {
+                    container.innerHTML = `
+                        <div class="news-item">• <b>Premier League:</b> Top clubs battle for crucial three points in the title race.</div>
+                        <div class="news-item">• <b>Champions League:</b> Quarter-final matchups promise intense European action.</div>
+                        <div class="news-item">• <b>Transfer Window:</b> Major clubs eye strategic signings ahead of the new season.</div>
+                        <div class="news-item">• <b>Match Analysis:</b> Tactical breakdown of weekend fixtures and standout performances.</div>
+                        <div class="news-item">• <b>Global Football:</b> International friendlies scheduled for upcoming FIFA window.</div>
+                    `;
+                });
+        }
+
+        // 🏏 Cricket News Integration (Showing up to 5 items)
+        function fetchCricketNews() {
+            const container = document.getElementById("cricketTicker");
+            container.innerHTML = '<div class="news-item">Loading cricket updates...</div>';
+            
+            const rssUrl = "https://www.cricbuzz.com/cb-editorial/rss/news";
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.items && data.items.length > 0) {
+                        container.innerHTML = "";
+                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
+                            const item = data.items[i];
+                            const itemDiv = document.createElement("div");
+                            itemDiv.className = "news-item";
+                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                            container.appendChild(itemDiv);
+                        }
+                    } else {
+                        throw new Error("No data");
+                    }
+                })
+                .catch(() => {
+                    container.innerHTML = `
+                        <div class="news-item">• <b>ICC Tournaments:</b> Latest updates, team squads, and match previews live on Cricbuzz.</div>
+                        <div class="news-item">• <b>Series Update:</b> International bilateral cricket series schedule and scorecards.</div>
+                        <div class="news-item">• <b>Domestic Leagues:</b> Exciting finishes and standout centuries in T20 leagues.</div>
+                        <div class="news-item">• <b>Player Rankings:</b> ICC releases updated test and ODI player rankings.</div>
+                        <div class="news-item">• <b>Match Report:</b> Thrilling last-over victory seals the series win.</div>
+                    `;
+                });
+        }
+
+        // Real Live Bengali News Fetching Logic (Showing up to 5 items)
+        function fetchLiveNews() {
+            const container = document.getElementById("newsTicker");
+            container.innerHTML = '<div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>';
+            
+            const rssUrl = "https://bengali.abplive.com/home/feed";
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.items && data.items.length > 0) {
+                        container.innerHTML = "";
+                        for (let i = 0; i < Math.min(5, data.items.length); i++) {
+                            const item = data.items[i];
+                            const itemDiv = document.createElement("div");
+                            itemDiv.className = "news-item";
+                            itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" style="color: inherit; text-decoration: none;"><b>${item.title}</b></a>`;
+                            container.appendChild(itemDiv);
+                        }
+                    } else {
+                        throw new Error("No items found");
+                    }
+                })
+                .catch(() => {
+                    container.innerHTML = `
+                        <div class="news-item">• <b>খবর:</b> রাজ্যে নতুন প্রযুক্তিগত পরিকাঠামো উন্নয়নের কাজ শুরু।</div>
+                        <div class="news-item">• <b>টেক:</b> মোবাইল ভিত্তিক ওয়েব হোস্টিংয়ে নতুন বিপ্লব।</div>
+                        <div class="news-item">• <b>কলকাতা:</b> মেট্রো প্রকল্পের নতুন রুটে যাতায়াত আরও সহজ হচ্ছে।</div>
+                        <div class="news-item">• <b>খেলা:</b> স্থানীয় ফুটবল টুর্নামেন্টে ব্যাপক উন্মাদনা দর্শকদের মধ্যে।</div>
+                        <div class="news-item">• <b>আবহাওয়া:</b> আগামী কয়েকদিন আবহাওয়া কেমন থাকবে জানুন বিস্তারিত।</div>
+                    `;
+                });
+        }
+
         // Password Generator Logic
         function generatePassword() {
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
@@ -294,25 +419,6 @@
                 pass += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             document.getElementById("passOutput").value = pass;
-        }
-
-        // News Ticker Rotation Logic
-        const newsPool = [
-            "• <b>Tech:</b> AI-driven mobile development platforms see massive growth.",
-            "• <b>Web:</b> Hosting live services directly from mobile environments becomes mainstream.",
-            "• <b>System:</b> Termux background server performance optimized successfully.",
-            "• <b>Innovation:</b> Lightweight JavaScript widgets enhance static mobile web hosting.",
-            "• <b>Update:</b> Debojyoti Dutta's phone server running smoothly with zero downtime."
-        ];
-
-        function rotateNews() {
-            const container = document.getElementById("newsTicker");
-            let shuffled = [...newsPool].sort(() => 0.5 - Math.random());
-            container.innerHTML = `
-                <div class="news-item">${shuffled[0]}</div>
-                <div class="news-item">${shuffled[1]}</div>
-                <div class="news-item">${shuffled[2]}</div>
-            `;
         }
 
         // Random Quote Generator Logic
@@ -340,6 +446,9 @@
             renderTasks();
             generatePassword();
             fetchWeather();
+            fetchFootballNews();
+            fetchCricketNews();
+            fetchLiveNews();
         }
 
         function saveNote() {
