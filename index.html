@@ -3,1146 +3,861 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Zune</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Zune Pulse - Live News & Current Affairs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --card-bg: rgba(20, 25, 38, 0.78);
-            --card-border: rgba(255, 255, 255, 0.12);
-            --card-glow: rgba(129, 199, 132, 0.15);
-            --text-color: #f4f4f9;
-            --text-subtle: #aaa;
-            --accent-green: #81C784;
-            --nav-bg: rgba(20, 25, 38, 0.85);
-            --btn-bg: #2e7d32;
-            --btn-hover: #388E3C;
-            --clock-face: #141926;
-            --clock-border: #64B5F6;
+            --bg-color: #080c14;
+            --card-bg: rgba(19, 27, 46, 0.75);
+            --card-hover: rgba(28, 39, 64, 0.85);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f3f4f6;
+            --text-subtle: #9ca3af;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --accent-blue: #38bdf8;
+            --tab-active: #059669;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+            --clock-face: rgba(17, 24, 39, 0.8);
+            --header-bg: rgba(11, 15, 25, 0.85);
         }
 
-        body.light-mode {
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(0, 0, 0, 0.08);
-            --card-glow: rgba(0, 0, 0, 0.05);
-            --text-color: #1e293b;
-            --text-subtle: #64748b;
-            --accent-green: #1b5e20;
-            --nav-bg: rgba(255, 255, 255, 0.9);
-            --btn-bg: #1b5e20;
-            --btn-hover: #2e7d32;
-            --clock-face: #f8fafc;
-            --clock-border: #0284c7;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Fixed Background Cross-Fade Layers */
-        .bg-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -2;
-            opacity: 0;
-            transition: opacity 1.2s ease-in-out;
-        }
-
-        .bg-layer.active {
-            opacity: 1;
-        }
-
-        /* Dynamic Overlay Mask */
-        #bg-overlay-mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            transition: background 0.5s ease;
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0a0f19;
-            color: var(--text-color);
-            text-align: center;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Bengali', sans-serif;
+            background-color: var(--bg-color);
+            /* High-definition abstract dark technology wallpaper with overlay */
+            background-image: 
+                radial-gradient(circle at center, rgba(8, 12, 20, 0.4) 0%, rgba(8, 12, 20, 0.95) 100%),
+                url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-main);
             min-height: 100vh;
-            margin: 0;
-            box-sizing: border-box;
-            transition: color 0.3s ease;
-        }
-
-        h1 {
-            color: var(--accent-green);
-            margin-bottom: 5px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        p {
-            font-size: 1.05rem;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
-        }
-
-        /* Top-Left Trigger Button */
-        .top-left-toggle {
-            position: fixed;
-            top: 18px;
-            left: 18px;
-            z-index: 1000;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.88rem;
-            transition: transform 0.25s ease, background 0.25s ease;
-        }
-
-        .top-left-toggle:hover {
-            transform: scale(1.05);
-            background: var(--btn-hover);
-            color: white;
-        }
-
-        /* Side Drawer & Overlay */
-        .drawer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
-            z-index: 1001;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .drawer-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .side-drawer {
-            position: fixed;
-            top: 0;
-            left: -380px;
-            width: 360px;
-            height: 100vh;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid var(--card-border);
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-            z-index: 1002;
-            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px 18px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            text-align: left;
-            overflow-y: auto;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .side-drawer.open {
-            left: 0;
-        }
-
-        /* Navigation Bar */
-        .nav-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(12px);
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-btn, .ctrl-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--btn-hover);
-            color: white;
-            box-shadow: 0 0 12px var(--card-glow);
-        }
-
-        .ctrl-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--card-border);
-        }
-
-        .ctrl-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        /* View Sections */
-        .page-section {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .page-section.active {
-            display: flex;
-        }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 22px;
-            width: 100%;
-            max-width: 1240px;
-            margin-bottom: 20px;
-        }
-
-        .widget-card {
-            background: var(--card-bg);
+        /* Header Bar */
+        header {
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 10px 14px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            padding: 22px;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-
-        .widget-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 35px var(--card-glow);
-            border-color: var(--accent-green);
-        }
-
-        /* Bengali Analog Clock */
-        .clock-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .analog-clock {
-            width: 180px;
-            height: 180px;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
-        }
-
-        .timer-display {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin: 6px 0;
-            color: #F48FB1;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-
-        .news-item {
-            font-size: 0.88rem;
-            text-align: left;
-            margin: 8px 0;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--card-border);
             width: 100%;
-            line-height: 1.4;
         }
 
-        .news-item a {
-            color: inherit;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .news-item a:hover {
-            color: var(--accent-green);
-            text-decoration: underline;
-        }
-
-        /* Shopping Hub Grid */
-        .hub-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 30px;
-        }
-
-        .shop-btn {
-            aspect-ratio: 1;
-            border-radius: 20px;
-            border: none;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
+        .header-content {
+            max-width: 1140px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s;
-            padding: 15px;
-            text-align: center;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .shop-btn:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
-            opacity: 0.95;
-        }
-
-        /* Brand Colors */
-        .flipkart { background-color: #2874f0; }
-        .amazon { background-color: #ff9900; color: #111; text-shadow: none; }
-        .meesho { background-color: #f43397; }
-        .myntra { background-color: #ff3f6c; }
-        .bigbasket { background-color: #84c225; color: #111; text-shadow: none; }
-        .swiggy { background-color: #fc8019; }
-        .zomato { background-color: #cb202d; }
-        .blinkit { background-color: #f8cb2e; color: #111; text-shadow: none; }
-        .zepto { background-color: #5e2ced; }
-        .bookmyshow { background-color: #c42430; }
-
-        .btn-container {
-            display: flex;
             gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
+            width: 100%;
         }
 
-        button {
-            padding: 10px 18px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            background-color: var(--btn-bg);
-            color: white;
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-family: 'Atma', cursive;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        /* Live Indicator Badge */
+        .live-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Sticky Note Button */
+        .sticky-btn {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+            color: #0f172a;
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.78rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        /* Sticky Drawer Window */
+        .sticky-drawer {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 14px;
+            width: calc(100% - 28px);
+            max-width: 300px;
+            background: #fef08a;
+            color: #0f172a;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+        }
+
+        .sticky-drawer.active {
+            display: block;
+        }
+
+        .sticky-drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 6px;
+        }
+
+        .sticky-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #0f172a;
+        }
+
+        .sticky-textarea {
+            width: 100%;
+            height: 120px;
+            background: transparent;
+            border: none;
+            resize: none;
+            font-family: inherit;
+            font-size: 0.88rem;
+            color: #0f172a;
+            outline: none;
+        }
+
+        /* Inline Header Clock */
+        .clock-widget {
+            width: 38px;
+            height: 38px;
+            background-color: var(--clock-face);
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            backdrop-filter: blur(8px);
+        }
+
+        .clock-number {
+            position: absolute;
+            font-size: 0.45rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        .num-12 { top: 2px; }
+        .num-3  { right: 2px; }
+        .num-6  { bottom: 2px; }
+        .num-9  { left: 2px; }
+
+        .clock-center {
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            transform-origin: bottom;
+            border-radius: 2px;
+        }
+
+        .hour-hand { width: 2px; height: 9px; background-color: var(--text-main); }
+        .minute-hand { width: 1.5px; height: 12px; background-color: var(--accent-blue); }
+        .second-hand { width: 1px; height: 14px; background-color: #f43f5e; }
+
+        /* Section Navigation Tabs */
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px auto 10px auto;
+            max-width: 1140px;
+            padding: 0 14px;
+            width: 100%;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--card-bg);
+            color: var(--text-subtle);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: all 0.2s ease;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
         }
 
-        button:hover {
-            background-color: var(--btn-hover);
-            transform: translateY(-1px);
+        .nav-tab.active {
+            background-color: var(--tab-active);
+            color: #ffffff;
+            border-color: var(--tab-active);
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
         }
 
-        /* Small Button Custom Styling */
-        .btn-small {
-            padding: 5px 12px !important;
-            font-size: 0.78rem !important;
-            border-radius: 6px !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+        /* Refresh Status Sub-header */
+        .refresh-status-bar {
+            max-width: 1140px;
+            margin: 0 auto 16px auto;
+            padding: 0 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.76rem;
+            color: var(--text-subtle);
+        }
+
+        .manual-refresh-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--accent-blue);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+            transition: background 0.2s ease;
+        }
+
+        .manual-refresh-btn:hover {
+            background: var(--card-hover);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1140px;
+            width: 100%;
+            margin: 0 auto 30px auto;
+            padding: 0 14px;
+            flex: 1;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Responsive Grids */
+        .news-grid, .ca-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            width: 100%;
+        }
+
+        .news-card, .ca-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            width: 100%;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .news-card:hover, .ca-card:hover {
+            transform: translateY(-3px);
+            background-color: var(--card-hover);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .ca-card {
+            border-left: 4px solid var(--accent);
+        }
+
+        .news-source, .ca-header {
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ca-tag {
+            background-color: var(--accent-glow);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .news-title, .ca-title {
+            font-size: 0.98rem;
+            font-weight: 600;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .news-title a, .ca-title a {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .ca-desc {
+            font-size: 0.88rem;
+            color: var(--text-subtle);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .news-date, .ca-footer {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+            border-top: 1px dashed var(--card-border);
+            padding-top: 10px;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ca-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Loading Sentinel */
+        .loading-sentinel {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.85rem;
+            color: var(--text-subtle);
+            width: 100%;
         }
 
         footer {
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 0.9rem;
+            text-align: center;
+            padding: 16px;
+            font-size: 0.8rem;
             color: var(--text-subtle);
             border-top: 1px solid var(--card-border);
+            background-color: var(--header-bg);
+            backdrop-filter: blur(12px);
+            margin-top: auto;
             width: 100%;
-            text-align: center;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
         }
 
-        footer a {
-            color: var(--accent-green);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
+        @media (max-width: 480px) {
+            .header-content {
+                gap: 6px;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+            .sticky-btn {
+                padding: 5px 10px;
+                font-size: 0.72rem;
+            }
+            .news-grid, .ca-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Crossfade System -->
-    <div id="bg-layer1" class="bg-layer active"></div>
-    <div id="bg-layer2" class="bg-layer"></div>
-    <div id="bg-overlay-mask"></div>
 
-    <!-- Top-Left Drawer Trigger -->
-    <button class="top-left-toggle" onclick="toggleDrawer()">
-        <span>📝</span> <span>Notes & Tasks</span>
-    </button>
-
-    <!-- Side Drawer & Overlay -->
-    <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
-    <div id="sideDrawer" class="side-drawer">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 12px; margin-bottom: 15px;">
-            <h3 style="margin: 0; color: var(--accent-green); display: flex; align-items: center; gap: 8px;">
-                📝 Workspace Tools
-            </h3>
-            <button onclick="toggleDrawer()" style="background: transparent; border: none; color: var(--text-color); font-size: 1.2rem; cursor: pointer; padding: 0 5px;">✕</button>
+    <!-- Sticky Note Drawer Window -->
+    <div class="sticky-drawer" id="stickyDrawer">
+        <div class="sticky-drawer-header">
+            <span>📝 Notes</span>
+            <button class="sticky-close" onclick="toggleStickyDrawer()">&times;</button>
         </div>
-
-        <!-- POMODORO TIMER -->
-        <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 18px; text-align: center;">
-            <h4 style="margin: 0 0 6px 0; font-size: 0.9rem; color: var(--text-color);">⏱️ Pomodoro Focus Timer</h4>
-            <div class="timer-display" id="timerDisplay">25:00</div>
-            <div style="display: flex; gap: 6px; justify-content: center;">
-                <button onclick="startTimer()" style="padding: 4px 10px; font-size: 0.78rem; background-color: #1E88E5;">Start</button>
-                <button onclick="pauseTimer()" style="padding: 4px 10px; font-size: 0.78rem; background-color: #FB8C00;">Pause</button>
-                <button onclick="resetTimer()" style="padding: 4px 10px; font-size: 0.78rem; background-color: #C62828;">Reset</button>
-            </div>
-        </div>
-
-        <!-- TO-DO LIST SECTION -->
-        <div style="margin-bottom: 18px;">
-            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: var(--text-color);">✅ To-Do List</h4>
-            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                <input type="text" id="todoInput" placeholder="Add a new task..." style="flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--card-border); background: rgba(0,0,0,0.25); color: var(--text-color); font-family: inherit; font-size: 0.88rem;" onkeypress="if(event.key==='Enter') addTodo()">
-                <button onclick="addTodo()" style="padding: 8px 14px; font-size: 0.85rem; border-radius: 8px;">Add</button>
-            </div>
-            <ul id="todoList" style="list-style: none; padding: 0; margin: 0; max-height: 150px; overflow-y: auto;"></ul>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 5px 0 15px 0;">
-
-        <!-- SCRATCHPAD SECTION -->
-        <div style="display: flex; flex-direction: column; flex: 1;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 0.95rem; color: var(--text-color);">📌 Quick Scratchpad</h4>
-                <span id="saveStatus" style="font-size: 0.75rem; color: var(--accent-green); opacity: 0; transition: opacity 0.3s;">Saved ✓</span>
-            </div>
-            <textarea id="scratchpad" placeholder="Type quick notes, ideas, or reminders here... (Auto-saved)" style="width: 100%; flex: 1; min-height: 140px; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(0,0,0,0.25); color: var(--text-color); font-family: inherit; font-size: 0.88rem; resize: vertical; box-sizing: border-box; line-height: 1.5;"></textarea>
-        </div>
+        <textarea class="sticky-textarea" id="stickyNotesText" placeholder="Write notes here..." oninput="saveNote()"></textarea>
     </div>
 
-    <h1>
-        Welcome to Zune! 
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg" alt="India" style="height: 28px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">
-    </h1>
-    <p id="greeting">Welcome to my website.</p>
+    <!-- Header Bar -->
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <button class="sticky-btn" onclick="toggleStickyDrawer()">
+                    📌 Notes
+                </button>
+                <a href="#" class="logo">
+                    🌐 Zune <span>Pulse</span>
+                </a>
+            </div>
 
-    <!-- Top Navigation Bar -->
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="switchPage('home')">🏠 Dashboard</button>
-        <button class="nav-btn" onclick="switchPage('shopping')">🛍️ Shopping Hub</button>
-        <button class="ctrl-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+            <div class="header-right">
+                <div class="live-badge">
+                    <div class="live-dot"></div> LIVE
+                </div>
+
+                <div class="clock-widget" title="Live Clock">
+                    <div class="clock-number num-12">12</div>
+                    <div class="clock-number num-3">3</div>
+                    <div class="clock-number num-6">6</div>
+                    <div class="clock-number num-9">9</div>
+                    <div class="clock-center"></div>
+                    <div class="hand hour-hand" id="hourHand"></div>
+                    <div class="hand minute-hand" id="minuteHand"></div>
+                    <div class="hand second-hand" id="secondHand"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="section-nav">
+        <button class="nav-tab active" onclick="switchSection('newsSection', this)">
+            📰 Bengali News
+        </button>
+        <button class="nav-tab" onclick="switchSection('caSection', this)">
+            📌 Current Affairs
+        </button>
     </div>
 
-    <!-- PAGE 1: MAIN DASHBOARD -->
-    <div id="homePage" class="page-section active">
-        <!-- Round Bengali Analog Clock -->
-        <div class="clock-container">
-            <svg class="analog-clock" viewBox="0 0 200 200">
-                <circle cx="100" cy="100" r="92" fill="var(--clock-face)" stroke="var(--clock-border)" stroke-width="4"/>
-                <text x="100" y="26" text-anchor="middle" fill="var(--text-color)" font-size="15" font-weight="bold">১২</text>
-                <text x="146" y="39" text-anchor="middle" fill="var(--text-subtle)" font-size="14">১</text>
-                <text x="177" y="70" text-anchor="middle" fill="var(--text-subtle)" font-size="14">২</text>
-                <text x="188" y="106" text-anchor="middle" fill="var(--text-color)" font-size="15" font-weight="bold">৩</text>
-                <text x="177" y="142" text-anchor="middle" fill="var(--text-subtle)" font-size="14">৪</text>
-                <text x="146" y="173" text-anchor="middle" fill="var(--text-subtle)" font-size="14">৫</text>
-                <text x="100" y="184" text-anchor="middle" fill="var(--text-color)" font-size="15" font-weight="bold">৬</text>
-                <text x="54" y="173" text-anchor="middle" fill="var(--text-subtle)" font-size="14">৭</text>
-                <text x="23" y="142" text-anchor="middle" fill="var(--text-subtle)" font-size="14">৮</text>
-                <text x="12" y="106" text-anchor="middle" fill="var(--text-color)" font-size="15" font-weight="bold">৯</text>
-                <text x="23" y="70" text-anchor="middle" fill="var(--text-subtle)" font-size="14">১০</text>
-                <text x="54" y="39" text-anchor="middle" fill="var(--text-subtle)" font-size="14">১১</text>
-                
-                <line id="hourHand" x1="100" y1="100" x2="100" y2="62" stroke="var(--text-color)" stroke-width="5" stroke-linecap="round" transform-origin="100 100"/>
-                <line id="minHand" x1="100" y1="100" x2="100" y2="44" stroke="var(--clock-border)" stroke-width="3.5" stroke-linecap="round" transform-origin="100 100"/>
-                <line id="secHand" x1="100" y1="100" x2="100" y2="35" stroke="#F48FB1" stroke-width="1.5" stroke-linecap="round" transform-origin="100 100"/>
-                <circle cx="100" cy="100" r="4" fill="#F48FB1"/>
-            </svg>
-        </div>
-
-        <div class="dashboard-grid">
-            <!-- Live Weather -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🌤️ Live Weather</p>
-                    <div id="weatherDisplay" style="font-size: 0.85rem;">Fetching weather data...</div>
-                </div>
-            </div>
-
-            <!-- Live Football Widget -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">⚽ Live Football</p>
-                    <div id="footballTicker" style="max-height: 200px; overflow-y: auto; width: 100%;">
-                        <div class="news-item">Loading football updates...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Live Cricket Widget (ESPNcricinfo) -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">🏏 Live Cricket (ESPNcricinfo)</p>
-                    <div id="cricketTicker" style="max-height: 200px; overflow-y: auto; width: 100%;">
-                        <div class="news-item">Loading live cricket news...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Regional News Ticker -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">📰 Live Regional News</p>
-                    <div id="newsTicker" style="max-height: 200px; overflow-y: auto; width: 100%;">
-                        <div class="news-item">খবর লোড হচ্ছে... (Loading live news...)</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Live Stock Market Graph -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 8px; font-size: 0.95rem;">📈 Live Stock Market (SENSEX)</p>
-                    <div class="tradingview-widget-container" style="height: 220px; width: 100%;">
-                        <div id="tradingview_widget"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stock Market & Financial News -->
-            <div class="widget-card">
-                <div style="width: 100%;">
-                    <p style="font-weight: 600; margin-bottom: 6px; font-size: 0.95rem;">📊 Stock Market & Financial News</p>
-                    <div id="stockTicker" style="max-height: 200px; overflow-y: auto; width: 100%;">
-                        <div class="news-item">Loading market news...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quotes Widget -->
-            <div class="widget-card">
-                <p id="quote" style="font-style: italic; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.5;">"Code is like humor. When you have to explain it, it’s bad."</p>
-                <button onclick="getNewQuote()" style="padding: 6px 12px; font-size: 0.85rem; margin-top: auto;">New Quote 💡</button>
-            </div>
-        </div>
-
-        <!-- Interactive Small Button -->
-        <div class="btn-container">
-            <button class="btn-small" onclick="makeInteractive()">Click Me!</button>
-        </div>
-        <p id="message" style="margin-top: 15px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></p>
+    <!-- Live Refresh Info Bar -->
+    <div class="refresh-status-bar">
+        <span id="lastUpdatedText">Last updated: Fetching latest feeds...</span>
+        <button class="manual-refresh-btn" onclick="forceRefreshAll()">🔄 Refresh Now</button>
     </div>
 
-    <!-- PAGE 2: SHOPPING HUB -->
-    <div id="shoppingPage" class="page-section">
-        <p style="margin-bottom: 25px;">Quick access to your favorite shopping and delivery platforms.</p>
-        <div class="hub-grid">
-            <a href="https://www.flipkart.com" target="_blank" rel="noopener noreferrer" class="shop-btn flipkart">Flipkart</a>
-            <a href="https://www.amazon.in" target="_blank" rel="noopener noreferrer" class="shop-btn amazon">Amazon India</a>
-            <a href="https://www.meesho.com" target="_blank" rel="noopener noreferrer" class="shop-btn meesho">Meesho</a>
-            <a href="https://www.myntra.com" target="_blank" rel="noopener noreferrer" class="shop-btn myntra">Myntra</a>
-            <a href="https://www.bigbasket.com" target="_blank" rel="noopener noreferrer" class="shop-btn bigbasket">BigBasket</a>
-            <a href="https://www.swiggy.com" target="_blank" rel="noopener noreferrer" class="shop-btn swiggy">Swiggy</a>
-            <a href="https://www.zomato.com" target="_blank" rel="noopener noreferrer" class="shop-btn zomato">Zomato</a>
-            <a href="https://www.blinkit.com" target="_blank" rel="noopener noreferrer" class="shop-btn blinkit">Blinkit</a>
-            <a href="https://www.zepto.com" target="_blank" rel="noopener noreferrer" class="shop-btn zepto">Zepto</a>
-            <a href="https://www.bookmyshow.com" target="_blank" rel="noopener noreferrer" class="shop-btn bookmyshow">BookMyShow</a>
-        </div>
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- SECTION 1: LIVE BENGALI NEWS GRID -->
+        <section id="newsSection" class="content-section active">
+            <div class="news-grid" id="newsGrid"></div>
+            <div class="loading-sentinel" id="newsLoader">Fetching live daily updates...</div>
+        </section>
+
+        <!-- SECTION 2: ENGLISH CURRENT AFFAIRS GRID -->
+        <section id="caSection" class="content-section">
+            <div class="ca-list" id="caList"></div>
+            <div class="loading-sentinel" id="caLoader">Fetching latest current affairs...</div>
+        </section>
+
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p style="margin-bottom: 5px; font-size: 0.95rem;">Contact Information</p>
-        <p style="margin-bottom: 0;">Email: <a href="mailto:debojyoti9545@gmail.com">debojyoti9545@gmail.com</a></p>
+        <p>Zune Pulse &copy; Real-Time News & Daily Current Affairs Portal</p>
     </footer>
 
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
-        /* ---------------- TOP-LEFT DRAWER, TO-DO LIST & SCRATCHPAD ---------------- */
-        function toggleDrawer() {
-            document.getElementById('sideDrawer').classList.toggle('open');
-            document.getElementById('drawerOverlay').classList.toggle('open');
+        let bengaliNews = [];
+        let englishCA = [];
+
+        let newsVisibleCount = 0;
+        let caVisibleCount = 0;
+        let activeTab = 'newsSection';
+        let isLoading = false;
+
+        function toggleStickyDrawer() {
+            const drawer = document.getElementById('stickyDrawer');
+            drawer.classList.toggle('active');
         }
 
-        let todos = JSON.parse(localStorage.getItem('zune_todos')) || [];
+        function saveNote() {
+            const text = document.getElementById('stickyNotesText').value;
+            localStorage.setItem('zune_sticky_notes', text);
+        }
 
-        function renderTodos() {
-            const list = document.getElementById('todoList');
-            list.innerHTML = '';
-            if (todos.length === 0) {
-                list.innerHTML = '<li style="font-size: 0.8rem; color: var(--text-subtle); font-style: italic;">No tasks yet. Add one above!</li>';
+        function loadNote() {
+            const saved = localStorage.getItem('zune_sticky_notes');
+            if (saved) document.getElementById('stickyNotesText').value = saved;
+        }
+
+        function updateAnalogClock() {
+            const now = new Date();
+            const sec = now.getSeconds();
+            const min = now.getMinutes();
+            const hr = now.getHours();
+
+            const secDeg = (sec / 60) * 360;
+            const minDeg = ((min + sec / 60) / 60) * 360;
+            const hrDeg = (((hr % 12) + min / 60) / 12) * 360;
+
+            document.getElementById('secondHand').style.transform = `rotate(${secDeg}deg)`;
+            document.getElementById('minuteHand').style.transform = `rotate(${minDeg}deg)`;
+            document.getElementById('hourHand').style.transform = `rotate(${hrDeg}deg)`;
+        }
+
+        function switchSection(sectionId, btn) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
+            activeTab = sectionId;
+
+            checkAndLoadMore();
+        }
+
+        const bengaliFeeds = [
+            { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/west-bengal-rss-1.727192' },
+            { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/national-rss-1.727196' },
+            { name: 'Sangbad Pratidin', url: 'https://www.sangbadpratidin.in/feed/' },
+            { name: 'ABP Ananda', url: 'https://bengali.abplive.com/home/feed' },
+            { name: 'Aaj Tak Bangla', url: 'https://bangla.aajtak.in/rss/feeds' }
+        ];
+
+        const englishCAFeeds = [
+            { name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
+            { name: 'The Hindu', url: 'https://www.thehindu.com/news/international/feeder/default.rss' },
+            { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' },
+            { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }
+        ];
+
+        async function fetchWithTimeout(url, timeoutMs = 4000) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(timer);
+                return res;
+            } catch (err) {
+                clearTimeout(timer);
+                throw err;
+            }
+        }
+
+        async function fetchSingleBengaliFeed(feed) {
+            const cacheBuster = Date.now();
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
+            
+            try {
+                const res = await fetchWithTimeout(apiUrl);
+                const data = await res.json();
+                if (data && data.items) {
+                    return data.items.map(item => ({
+                        title: item.title,
+                        link: item.link,
+                        pubDate: item.pubDate,
+                        source: feed.name
+                    }));
+                }
+            } catch (e) {
+                try {
+                    const fallbackUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
+                    const res = await fetchWithTimeout(fallbackUrl);
+                    const xmlText = await res.text();
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                    const xmlItems = xmlDoc.querySelectorAll("item");
+                    let items = [];
+                    xmlItems.forEach(item => {
+                        const title = item.querySelector("title")?.textContent || '';
+                        const link = item.querySelector("link")?.textContent || '';
+                        const pubDate = item.querySelector("pubDate")?.textContent || '';
+                        if (title) items.push({ title, link, pubDate, source: feed.name });
+                    });
+                    return items;
+                } catch (fallbackErr) {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        async function fetchBengaliNews() {
+            bengaliNews = [];
+            const promises = bengaliFeeds.map(feed => fetchSingleBengaliFeed(feed));
+            const results = await Promise.allSettled(promises);
+
+            results.forEach(res => {
+                if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+                    bengaliNews.push(...res.value);
+                }
+            });
+
+            const uniqueMap = new Map();
+            bengaliNews.forEach(item => {
+                if (item.title && !uniqueMap.has(item.title)) {
+                    uniqueMap.set(item.title, item);
+                }
+            });
+
+            bengaliNews = Array.from(uniqueMap.values());
+            bengaliNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+            newsVisibleCount = 0;
+            document.getElementById('newsGrid').innerHTML = '';
+            renderMoreNews(50);
+            updateTimestampDisplay();
+        }
+
+        async function fetchSingleEnglishFeed(feed) {
+            const cacheBuster = Date.now();
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
+            try {
+                const res = await fetchWithTimeout(apiUrl);
+                const data = await res.json();
+                if (data && data.items) {
+                    return data.items.map(item => ({
+                        title: item.title,
+                        link: item.link,
+                        pubDate: item.pubDate,
+                        source: feed.name,
+                        description: item.description || item.content || ''
+                    }));
+                }
+            } catch (e) {
+                return [];
+            }
+            return [];
+        }
+
+        async function fetchEnglishCurrentAffairs() {
+            englishCA = [];
+            const promises = englishCAFeeds.map(feed => fetchSingleEnglishFeed(feed));
+            const results = await Promise.allSettled(promises);
+
+            results.forEach(res => {
+                if (res.status === 'fulfilled' && Array.isArray(res.value)) {
+                    englishCA.push(...res.value);
+                }
+            });
+
+            const uniqueMap = new Map();
+            englishCA.forEach(item => {
+                if (item.title && !uniqueMap.has(item.title)) {
+                    uniqueMap.set(item.title, item);
+                }
+            });
+            englishCA = Array.from(uniqueMap.values());
+            englishCA.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+            caVisibleCount = 0;
+            document.getElementById('caList').innerHTML = '';
+            renderMoreCA(50);
+            updateTimestampDisplay();
+        }
+
+        function renderMoreNews(batchCount = 18) {
+            const grid = document.getElementById('newsGrid');
+            const loader = document.getElementById('newsLoader');
+
+            if (bengaliNews.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No new updates available right now.</div>';
+                loader.style.display = 'none';
                 return;
             }
-            todos.forEach((todo, index) => {
-                const li = document.createElement('li');
-                li.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; margin-bottom: 6px; background: rgba(255,255,255,0.06); border-radius: 8px; border: 1px solid var(--card-border); font-size: 0.85rem;';
-                
-                li.innerHTML = `
-                    <span style="flex: 1; text-decoration: ${todo.completed ? 'line-through' : 'none'}; opacity: ${todo.completed ? 0.5 : 1}; cursor: pointer; word-break: break-word;" onclick="toggleTodo(${index})">
-                        ${todo.completed ? '☑️' : '⏹️'} ${escapeHtml(todo.text)}
-                    </span>
-                    <button onclick="deleteTodo(${index})" style="background: transparent; border: none; color: #ff5252; cursor: pointer; padding: 2px 6px; font-size: 0.85rem; box-shadow: none;">🗑️</button>
-                `;
-                list.appendChild(li);
-            });
-        }
 
-        function addTodo() {
-            const input = document.getElementById('todoInput');
-            const text = input.value.trim();
-            if (text) {
-                todos.push({ text: text, completed: false });
-                input.value = '';
-                saveTodos();
+            const nextBatch = bengaliNews.slice(newsVisibleCount, newsVisibleCount + batchCount);
+
+            nextBatch.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="news-source">📌 ${escapeHtml(item.source)}</div>
+                        <div class="news-title">
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
+                        </div>
+                    </div>
+                    <div class="news-date">🕒 ${formatDate(item.pubDate)}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            newsVisibleCount += nextBatch.length;
+
+            if (newsVisibleCount >= bengaliNews.length) {
+                loader.innerText = 'You are all caught up with live news for today.';
+            } else {
+                loader.innerText = `Showing ${newsVisibleCount} of ${bengaliNews.length} news — Scroll for more...`;
             }
         }
 
-        function toggleTodo(index) {
-            todos[index].completed = !todos[index].completed;
-            saveTodos();
+        function renderMoreCA(batchCount = 18) {
+            const caList = document.getElementById('caList');
+            const loader = document.getElementById('caLoader');
+
+            if (englishCA.length === 0) {
+                caList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No current affairs available.</div>';
+                loader.style.display = 'none';
+                return;
+            }
+
+            const nextBatch = englishCA.slice(caVisibleCount, caVisibleCount + batchCount);
+
+            nextBatch.forEach(item => {
+                let cleanDesc = item.description.replace(/<[^>]*>?/gm, '').trim();
+                let words = cleanDesc.split(/\s+/);
+                let summaryText = words.length > 30 ? words.slice(0, 30).join(' ') + '...' : cleanDesc;
+
+                if (!summaryText || summaryText.length < 15) {
+                    summaryText = `${item.title} — Key daily national update for competitive exams and general awareness. Read full story below.`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'ca-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="ca-header">
+                            <span class="ca-tag">Current Affairs</span>
+                            <span style="font-size:0.75rem; color:var(--text-subtle);">${formatDate(item.pubDate)}</span>
+                        </div>
+                        <div class="ca-title">
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
+                        </div>
+                        <div class="ca-desc">${escapeHtml(summaryText)}</div>
+                    </div>
+                    <div class="ca-footer">
+                        <span>Source: ${escapeHtml(item.source)}</span>
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="ca-link">Read More →</a>
+                    </div>
+                `;
+                caList.appendChild(card);
+            });
+
+            caVisibleCount += nextBatch.length;
+
+            if (caVisibleCount >= englishCA.length) {
+                loader.innerText = 'You are all caught up with live current affairs for today.';
+            } else {
+                loader.innerText = `Showing ${caVisibleCount} of ${englishCA.length} updates — Scroll for more...`;
+            }
         }
 
-        function deleteTodo(index) {
-            todos.splice(index, 1);
-            saveTodos();
+        function checkAndLoadMore() {
+            if (isLoading) return;
+
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const threshold = document.documentElement.offsetHeight - 600;
+
+            if (scrollPosition >= threshold) {
+                isLoading = true;
+                if (activeTab === 'newsSection' && newsVisibleCount < bengaliNews.length) {
+                    renderMoreNews(18);
+                } else if (activeTab === 'caSection' && caVisibleCount < englishCA.length) {
+                    renderMoreCA(18);
+                }
+                setTimeout(() => { isLoading = false; }, 200);
+            }
         }
 
-        function saveTodos() {
-            localStorage.setItem('zune_todos', JSON.stringify(todos));
-            renderTodos();
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Today';
+            const d = new Date(dateStr);
+            return isNaN(d) ? 'Today' : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
         }
 
         function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
         }
 
-        const scratchpad = document.getElementById('scratchpad');
-        scratchpad.value = localStorage.getItem('zune_scratchpad') || '';
-
-        scratchpad.addEventListener('input', () => {
-            localStorage.setItem('zune_scratchpad', scratchpad.value);
-            const status = document.getElementById('saveStatus');
-            status.style.opacity = '1';
-            clearTimeout(window.saveTimeout);
-            window.saveTimeout = setTimeout(() => { status.style.opacity = '0'; }, 1500);
-        });
-
-        renderTodos();
-
-        /* ---------------- WALLPAPERS LIBRARY ---------------- */
-        const photoIds = [
-            "1518709268805-4e9042af9f23", "1506703719100-a0f3a48c0f86", "1506744038136-46273834b3fb", "1526374965328-7f61d4dc18c5",
-            "1507525428034-b723cf961d3e", "1519501025264-65ba15a82390", "1448375240586-882707db888b", "1531366936337-7c912a4589a7",
-            "1477959858617-67f30ac4ce78", "1550684848-fac1c5b4e853", "1518173946687-a4c8a383392e", "1501785888041-af3ef285b470",
-            "1470071459604-3b5ec3a7fe05", "1426604966848-d7adac402bff", "1497436072909-60f360e1d4b1", "1500530855697-b586d89ba3ee",
-            "1464822759023-fed622ff2c3b", "1472214103451-9374bd1c798e", "1469474968028-56623f02e42e", "1511447333015-45b65e60f6d5"
-        ];
-
-        const wallpapers = [];
-        for (let i = 0; i < 200; i++) {
-            const id = photoIds[i % photoIds.length];
-            wallpapers.push(`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1920&q=80&sig=${i}`);
-        }
-
-        let currentWallpaperIndex = parseInt(localStorage.getItem('zune_wp_index')) || 0;
-        if (currentWallpaperIndex >= wallpapers.length) currentWallpaperIndex = 0;
-
-        let isDarkMode = localStorage.getItem('zune_theme') !== 'light';
-        let activeLayer = 1;
-
-        function updateOverlayMask() {
-            const mask = document.getElementById('bg-overlay-mask');
-            mask.style.background = isDarkMode
-                ? 'linear-gradient(rgba(10, 15, 25, 0.45), rgba(10, 15, 25, 0.55))'
-                : 'linear-gradient(rgba(240, 244, 248, 0.45), rgba(220, 230, 242, 0.55))';
-        }
-
-        function initBackground() {
-            updateOverlayMask();
-            const layer1 = document.getElementById('bg-layer1');
-            layer1.style.backgroundImage = `url('${wallpapers[currentWallpaperIndex]}')`;
-        }
-
-        function cycleWallpaper() {
-            const nextIndex = (currentWallpaperIndex + 1) % wallpapers.length;
-            const currentLayer = document.getElementById(`bg-layer${activeLayer}`);
-            const nextLayerNum = activeLayer === 1 ? 2 : 1;
-            const nextLayer = document.getElementById(`bg-layer${nextLayerNum}`);
-
-            const img = new Image();
-            img.onload = () => {
-                nextLayer.style.backgroundImage = `url('${wallpapers[nextIndex]}')`;
-                nextLayer.classList.add('active');
-                currentLayer.classList.remove('active');
-
-                currentWallpaperIndex = nextIndex;
-                activeLayer = nextLayerNum;
-                localStorage.setItem('zune_wp_index', currentWallpaperIndex);
-            };
-            img.onerror = () => {
-                currentWallpaperIndex = nextIndex;
-                cycleWallpaper();
-            };
-            img.src = wallpapers[nextIndex];
-        }
-
-        setInterval(cycleWallpaper, 10000);
-
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('light-mode', !isDarkMode);
-            localStorage.setItem('zune_theme', isDarkMode ? 'dark' : 'light');
-            
-            const themeBtn = document.getElementById('themeBtn');
-            themeBtn.innerHTML = isDarkMode ? '🌙 Dark Mode' : '☀️ Light Mode';
-            
-            updateOverlayMask();
-            initTradingViewWidget();
-        }
-
-        function initTradingViewWidget() {
-            const tvTheme = isDarkMode ? "dark" : "light";
-            const container = document.getElementById('tradingview_widget');
-            if (container) container.innerHTML = "";
-            
-            if (typeof TradingView !== "undefined") {
-                new TradingView.widget({
-                  "width": "100%",
-                  "height": 220,
-                  "symbol": "BSE:SENSEX",
-                  "interval": "D",
-                  "timezone": "Asia/Kolkata",
-                  "theme": tvTheme,
-                  "style": "3",
-                  "locale": "in",
-                  "enable_publishing": false,
-                  "backgroundColor": "rgba(20, 25, 38, 0)",
-                  "hide_top_toolbar": true,
-                  "hide_legend": true,
-                  "save_image": false,
-                  "container_id": "tradingview_widget"
-                });
-            }
-        }
-
-        if (!isDarkMode) {
-            document.body.classList.add('light-mode');
-            document.getElementById('themeBtn').innerHTML = '☀️ Light Mode';
-        }
-        initBackground();
-
-        /* ---------------- CORE DASHBOARD LOGIC ---------------- */
-        function switchPage(page) {
-            const homePage = document.getElementById("homePage");
-            const shoppingPage = document.getElementById("shoppingPage");
-            const buttons = document.querySelectorAll(".nav-btn");
-
-            buttons.forEach(btn => btn.classList.remove("active"));
-
-            if (page === 'home') {
-                homePage.classList.add("active");
-                shoppingPage.classList.remove("active");
-                buttons[0].classList.add("active");
-            } else {
-                shoppingPage.classList.add("active");
-                homePage.classList.remove("active");
-                buttons[1].classList.add("active");
-            }
-        }
-
-        function updateClock() {
+        function updateTimestampDisplay() {
             const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-
-            const hourDeg = ((hours % 12) * 30) + (minutes * 0.5);
-            const minDeg = (minutes * 6) + (seconds * 0.1);
-            const secDeg = seconds * 6;
-
-            document.getElementById("hourHand").style.transform = `rotate(${hourDeg}deg)`;
-            document.getElementById("minHand").style.transform = `rotate(${minDeg}deg)`;
-            document.getElementById("secHand").style.transform = `rotate(${secDeg}deg)`;
-
-            let greetingText = "Welcome to my website.";
-            if (hours < 12) {
-                greetingText = "🌅 Good Morning! Welcome to Zune.";
-            } else if (hours < 18) {
-                greetingText = "☀️ Good Afternoon! Welcome to Zune.";
-            } else {
-                greetingText = "🌙 Good Evening! Welcome to Zune.";
-            }
-            document.getElementById("greeting").innerText = greetingText;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        function fetchWeather() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    getWeatherData(position.coords.latitude, position.coords.longitude);
-                }, () => {
-                    getWeatherData(22.57, 88.36);
-                });
-            } else {
-                getWeatherData(22.57, 88.36);
-            }
+            const timeString = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('lastUpdatedText').innerText = `Last updated today at ${timeString}`;
         }
 
-        function getWeatherData(lat, lon) {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const temp = data.current_weather.temperature;
-                    const windspeed = data.current_weather.windspeed;
-                    const condition = getWeatherCondition(data.current_weather.weathercode);
-                    
-                    document.getElementById("weatherDisplay").innerHTML = `
-                        <b>Temperature:</b> ${temp}°C | <b>Condition:</b> ${condition}<br>
-                        <b>Wind Speed:</b> ${windspeed} km/h
-                    `;
-                })
-                .catch(() => {
-                    document.getElementById("weatherDisplay").innerHTML = "Unable to fetch weather data.";
-                });
+        function forceRefreshAll() {
+            document.getElementById('lastUpdatedText').innerText = 'Updating feeds live...';
+            fetchBengaliNews();
+            fetchEnglishCurrentAffairs();
         }
 
-        function getWeatherCondition(code) {
-            if (code === 0) return "Clear sky ☀️";
-            if (code >= 1 && code <= 3) return "Partly cloudy ⛅";
-            if (code >= 45 && code <= 48) return "Foggy 🌫️";
-            if (code >= 51 && code <= 67) return "Rainy 🌧️";
-            if (code >= 71 && code <= 77) return "Snowy ❄️";
-            if (code >= 95) return "Thunderstorm ⛈️";
-            return "Fair 🌤️";
-        }
+        window.onscroll = checkAndLoadMore;
+        window.onresize = checkAndLoadMore;
 
-        /* ---------------- AUTO-UPDATE LIVE NEWS FEEDS ---------------- */
-        let allFootballItems = [], allCricketItems = [], allNewsItems = [], allStockItems = [];
+        window.onload = () => {
+            loadNote();
+            setInterval(updateAnalogClock, 1000);
+            updateAnalogClock();
 
-        function fetchFootballNews() {
-            const container = document.getElementById("footballTicker");
-            const rssUrl = "https://www.skysports.com/rss/12040";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
+            fetchBengaliNews();
+            fetchEnglishCurrentAffairs();
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.items && data.items.length > 0) {
-                        allFootballItems = data.items;
-                        displayRandomItems('footballTicker', allFootballItems);
-                    }
-                })
-                .catch(() => {
-                    if (container.children.length === 0 || container.innerText.includes("Loading")) {
-                        container.innerHTML = `
-                            <div class="news-item">• <b>Premier League:</b> Top clubs battle for crucial points in the title race.</div>
-                            <div class="news-item">• <b>Champions League:</b> Knockout stage matchups promise intense action.</div>
-                        `;
-                    }
-                });
-        }
-
-        function fetchCricketNews() {
-            const container = document.getElementById("cricketTicker");
-            const rssUrl = "https://www.espncricinfo.com/rss/content/story/feeds/6.xml";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.items && data.items.length > 0) {
-                        allCricketItems = data.items;
-                        displayRandomItems('cricketTicker', allCricketItems);
-                    } else {
-                        throw new Error("No items returned");
-                    }
-                })
-                .catch(() => {
-                    if (container.children.length === 0 || container.innerText.includes("Loading")) {
-                        container.innerHTML = `
-                            <div class="news-item">• <b>ESPNcricinfo:</b> Live match coverage and score updates underway.</div>
-                            <div class="news-item">• <b>International Cricket:</b> Latest series schedules and team updates.</div>
-                        `;
-                    }
-                });
-        }
-
-        function fetchLiveNews() {
-            const container = document.getElementById("newsTicker");
-            const rssUrl = "https://bengali.abplive.com/home/feed";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.items && data.items.length > 0) {
-                        allNewsItems = data.items;
-                        displayRandomItems('newsTicker', allNewsItems);
-                    }
-                })
-                .catch(() => {
-                    if (container.children.length === 0 || container.innerText.includes("Loading")) {
-                        container.innerHTML = `
-                            <div class="news-item">• <b>খবর:</b> রাজ্যে নতুন প্রযুক্তিগত পরিকাঠামো উন্নয়নের কাজ শুরু।</div>
-                        `;
-                    }
-                });
-        }
-
-        function fetchStockNews() {
-            const container = document.getElementById("stockTicker");
-            const rssUrl = "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms";
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&_=${Date.now()}`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.items && data.items.length > 0) {
-                        allStockItems = data.items;
-                        displayRandomItems('stockTicker', allStockItems);
-                    }
-                })
-                .catch(() => {
-                    if (container.children.length === 0 || container.innerText.includes("Loading")) {
-                        container.innerHTML = `
-                            <div class="news-item">• <b>NIFTY & SENSEX:</b> Equity benchmarks gain momentum on domestic buying.</div>
-                        `;
-                    }
-                });
-        }
-
-        function displayRandomItems(elementId, itemsList) {
-            const container = document.getElementById(elementId);
-            container.innerHTML = "";
-            const shuffled = [...itemsList].sort(() => 0.5 - Math.random());
-            for (let i = 0; i < Math.min(5, shuffled.length); i++) {
-                const item = shuffled[i];
-                const itemDiv = document.createElement("div");
-                itemDiv.className = "news-item";
-                itemDiv.innerHTML = `• <a href="${item.link}" target="_blank" rel="noopener"><b>${item.title}</b></a>`;
-                container.appendChild(itemDiv);
-            }
-        }
-
-        function refreshAllNewsSilent() {
-            fetchFootballNews();
-            fetchCricketNews();
-            fetchLiveNews();
-            fetchStockNews();
-            fetchWeather();
-        }
-
-        /* ---------------- QUOTES LIBRARY (50+ QUOTES) ---------------- */
-        const quotes = [
-            "Code is like humor. When you have to explain it, it’s bad. — Cory House",
-            "Simplicity is the soul of efficiency. — Austin Freeman",
-            "Make it work, make it right, make it fast. — Kent Beck",
-            "Programs must be written for people to read, and only incidentally for machines to execute. — Harold Abelson",
-            "Talk is cheap. Show me the code. — Linus Torvalds",
-            "First, solve the problem. Then, write the code. — John Johnson",
-            "Keep coding, keep creating, keep evolving. — Zune",
-            "Experience is the name everyone gives to their mistakes. — Oscar Wilde",
-            "In order to be irreplaceable, one must always be different. — Coco Chanel",
-            "Java is to JavaScript what car is to Carpet. — Chris Heilmann",
-            "Knowledge is power. — Francis Bacon",
-            "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code. — Dan Salomon",
-            "Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away. — Antoine de Saint-Exupery",
-            "Ruby is rubbish: PHP is philistinism. — Erik Naggum",
-            "Controlling complexity is the essence of computer programming. — Brian Kernighan",
-            "Web development is a canvas, and code is the paint. — Unknown",
-            "The function of good software is to make the complex appear simple. — Grady Booch",
-            "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. — Martin Fowler",
-            "Optimism is an occupational hazard of programming: feedback is the treatment. — Kent Beck",
-            "Measuring programming progress by lines of code is like measuring aircraft building progress by weight. — Bill Gates",
-            "There are only two hard things in Computer Science: cache invalidation and naming things. — Martin Fowler",
-            "Premature optimization is the root of all evil. — Donald Knuth",
-            "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it. — Brian Kernighan",
-            "It’s not a bug – it’s an undocumented feature. — Anonymous",
-            "Software and cathedrals are much the same — first we build them, then we pray. — Sam Redwine",
-            "A language that doesn't affect the way you think about programming is not worth knowing. — Alan J. Perlis",
-            "The most disastrous thing that you can ever do is have default values. — Ted Nelson",
-            "PHP is a minor evil perpetrated and sanctified by the incompetent-programmer community. — Rasmus Lerdorf",
-            "Won't somebody please think of the Unicode? — Spiceman",
-            "The best way to get a project done faster is to start sooner. — Jim Highsmith",
-            "Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is better than nothing. — Dick Brandon",
-            "I'm not a great programmer; I'm just a good programmer with great habits. — Kent Beck",
-            "Fools ignore complexity. Pragmatists suffer it. Some can avoid it. Geniuses remove it. — Alan Perlis",
-            "The best code is no code at all. — Jeff Atwood",
-            "Computers are good at following instructions, but not at reading your mind. — Donald Knuth",
-            "In software systems, it is often the case that the most important thing is not what you do, but what you don’t do. — Martin Fowler",
-            "The computer was born to solve problems that did not exist before. — Bill Gates",
-            "Good design adds value faster than it adds cost. — Thomas C. Gale",
-            "Truth can only be found in one place: the source code. — Robert C. Martin",
-            "One man’s crappy software is another man’s full-time job. — Jessica Gaston",
-            "A user interface is like a joke. If you have to explain it, it’s not that good. — Martin LeBlanc",
-            "Design is not just what it looks like and feels like. Design is how it works. — Steve Jobs",
-            "The elevator to success is out of order. You’ll have to use the stairs, one step at a time. — Joe Girard",
-            "Action is the foundational key to all success. — Pablo Picasso",
-            "Creativity is intelligence having fun. — Albert Einstein",
-            "Do what you can, with what you have, where you are. — Theodore Roosevelt",
-            "Dream big and dare to fail. — Norman Vaughan",
-            "It does not matter how slowly you go as long as you do not stop. — Confucius",
-            "Everything you’ve ever wanted is on the other side of fear. — George Addair",
-            "Success usually comes to those who are too busy to be looking for it. — Henry David Thoreau"
-        ];
-
-        function getNewQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            document.getElementById("quote").innerText = `"${quotes[randomIndex]}"`;
-        }
-
-        window.onload = function() {
-            fetchWeather();
-            fetchFootballNews();
-            fetchCricketNews();
-            fetchLiveNews();
-            fetchStockNews();
-            initTradingViewWidget();
-            getNewQuote();
-
-            // Auto-refresh news and weather silently every 2 minutes
-            setInterval(refreshAllNewsSilent, 120000);
-        }
-
-        /* ---------------- POMODORO TIMER LOGIC ---------------- */
-        let timerInterval = null, timeLeft = 1500, isRunning = false;
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById("timerDisplay").innerText = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                timerInterval = setInterval(() => {
-                    if (timeLeft > 0) {
-                        timeLeft--;
-                        updateTimerDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        alert("Pomodoro session completed!");
-                    }
-                }, 1000);
-            }
-        }
-
-        function pauseTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timeLeft = 1500;
-            updateTimerDisplay();
-        }
-
-        /* ---------------- NATIONAL ANTHEM TONE & INTERACTIVE BUTTON ---------------- */
-        async function playAnthemTone() {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const ctx = new AudioContext();
-
-            // Resume AudioContext if suspended by browser autoplay policy
-            if (ctx.state === 'suspended') {
-                await ctx.resume();
-            }
-
-            const notes = [
-                { freq: 261.63, dur: 0.35 },
-                { freq: 293.66, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 329.63, dur: 0.45 },
-                { freq: 293.66, dur: 0.35 },
-                { freq: 329.63, dur: 0.35 },
-                { freq: 349.23, dur: 0.65 }
-            ];
-
-            let now = ctx.currentTime;
-            notes.forEach(note => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(note.freq, now);
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + note.dur - 0.05);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + note.dur);
-                now += note.dur;
-            });
-        }
-
-        function makeInteractive() {
-            playAnthemTone();
-            document.getElementById("message").innerHTML = `
-                🎉 Welcome to Zune! Proudly displaying the Indian Flag:<br>
-                <div style="margin-top: 15px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_India.svg" 
-                         alt="Indian Flag" 
-                         style="width: 120px; border-radius: 8px; box-shadow: 0 6px 16px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);">
-                </div>
-            `;
-        }
+            setInterval(fetchBengaliNews, 180000);
+            setInterval(fetchEnglishCurrentAffairs, 180000);
+        };
     </script>
 </body>
 </html>
