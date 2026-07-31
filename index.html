@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zune Pulse - Live News & Current Affairs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
+    <title>Zune Pulse - Live News, Markets, Entertainment & Sports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #080c14;
@@ -16,7 +16,6 @@
             --accent: #10b981;
             --accent-glow: rgba(16, 185, 129, 0.15);
             --accent-blue: #38bdf8;
-            --tab-active: #059669;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
             --clock-face: rgba(17, 24, 39, 0.8);
             --header-bg: rgba(11, 15, 25, 0.85);
@@ -35,9 +34,8 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', 'Noto Sans Bengali', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Bengali', sans-serif;
             background-color: var(--bg-color);
-            /* High-definition abstract dark technology wallpaper with overlay */
             background-image: 
                 radial-gradient(circle at center, rgba(8, 12, 20, 0.4) 0%, rgba(8, 12, 20, 0.95) 100%),
                 url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop');
@@ -96,7 +94,6 @@
             color: var(--accent);
         }
 
-        /* Live Indicator Badge */
         .live-badge {
             background: rgba(16, 185, 129, 0.15);
             border: 1px solid var(--accent);
@@ -124,7 +121,6 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Sticky Note Button */
         .sticky-btn {
             background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
             color: #0f172a;
@@ -142,7 +138,6 @@
             white-space: nowrap;
         }
 
-        /* Sticky Drawer Window */
         .sticky-drawer {
             display: none;
             position: fixed;
@@ -193,7 +188,6 @@
             outline: none;
         }
 
-        /* Inline Header Clock */
         .clock-widget {
             width: 38px;
             height: 38px;
@@ -240,11 +234,11 @@
         .minute-hand { width: 1.5px; height: 12px; background-color: var(--accent-blue); }
         .second-hand { width: 1px; height: 14px; background-color: #f43f5e; }
 
-        /* Section Navigation Tabs */
+        /* Navigation Grid */
         .section-nav {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
             margin: 20px auto 10px auto;
             max-width: 1140px;
             padding: 0 14px;
@@ -252,14 +246,10 @@
         }
 
         .nav-tab {
-            flex: 1;
-            padding: 12px 14px;
-            font-size: 0.9rem;
+            padding: 10px 6px;
+            font-size: 0.8rem;
             font-weight: 600;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--card-bg);
-            color: var(--text-subtle);
-            border: 1px solid var(--card-border);
             border-radius: 12px;
             cursor: pointer;
             display: flex;
@@ -268,17 +258,83 @@
             text-align: center;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
+            white-space: nowrap;
         }
 
-        .nav-tab.active {
-            background-color: var(--tab-active);
+        /* Unique Tab Styling per Section */
+        .nav-tab.tab-ca {
+            background-color: rgba(16, 185, 129, 0.12);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .nav-tab.tab-ca.active, .nav-tab.tab-ca:hover {
+            background-color: #10b981;
             color: #ffffff;
-            border-color: var(--tab-active);
-            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+            border-color: #10b981;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
         }
 
-        /* Refresh Status Sub-header */
+        .nav-tab.tab-bengali {
+            background-color: rgba(56, 189, 248, 0.12);
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .nav-tab.tab-bengali.active, .nav-tab.tab-bengali:hover {
+            background-color: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .nav-tab.tab-hindi {
+            background-color: rgba(168, 85, 247, 0.12);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .nav-tab.tab-hindi.active, .nav-tab.tab-hindi:hover {
+            background-color: #9333ea;
+            color: #ffffff;
+            border-color: #9333ea;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+        }
+
+        .nav-tab.tab-stock {
+            background-color: rgba(245, 158, 11, 0.12);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .nav-tab.tab-stock.active, .nav-tab.tab-stock:hover {
+            background-color: #d97706;
+            color: #ffffff;
+            border-color: #d97706;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+        }
+
+        .nav-tab.tab-ent {
+            background-color: rgba(236, 72, 153, 0.12);
+            color: #f472b6;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        .nav-tab.tab-ent.active, .nav-tab.tab-ent:hover {
+            background-color: #db2777;
+            color: #ffffff;
+            border-color: #db2777;
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+        }
+
+        .nav-tab.tab-sports {
+            background-color: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .nav-tab.tab-sports.active, .nav-tab.tab-sports:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
         .refresh-status-bar {
             max-width: 1140px;
             margin: 0 auto 16px auto;
@@ -307,7 +363,6 @@
             background: var(--card-hover);
         }
 
-        /* Main Container */
         .main-container {
             max-width: 1140px;
             width: 100%;
@@ -324,15 +379,14 @@
             display: block;
         }
 
-        /* Responsive Grids */
-        .news-grid, .ca-list {
+        .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px;
             width: 100%;
         }
 
-        .news-card, .ca-card {
+        .news-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 14px;
@@ -347,17 +401,19 @@
             transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
         }
 
-        .news-card:hover, .ca-card:hover {
+        .news-card:hover {
             transform: translateY(-3px);
             background-color: var(--card-hover);
             border-color: rgba(56, 189, 248, 0.3);
         }
 
-        .ca-card {
-            border-left: 4px solid var(--accent);
-        }
+        .card-stock { border-left: 4px solid #f59e0b; }
+        .card-ent { border-left: 4px solid #ec4899; }
+        .card-ca { border-left: 4px solid var(--accent); }
+        .card-hindi { border-left: 4px solid #a855f7; }
+        .card-sports { border-left: 4px solid #ef4444; }
 
-        .news-source, .ca-header {
+        .news-source {
             font-size: 0.75rem;
             color: var(--accent-blue);
             font-weight: 700;
@@ -367,34 +423,39 @@
             align-items: center;
         }
 
-        .ca-tag {
+        .news-tag {
             background-color: var(--accent-glow);
             color: var(--accent);
             padding: 3px 8px;
             border-radius: 12px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.7rem;
         }
 
-        .news-title, .ca-title {
+        .tag-stock { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .tag-ent { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; }
+        .tag-hindi { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
+        .tag-sports { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+        .news-title {
             font-size: 0.98rem;
             font-weight: 600;
             line-height: 1.45;
             margin-bottom: 10px;
         }
 
-        .news-title a, .ca-title a {
+        .news-title a {
             color: var(--text-main);
             text-decoration: none;
         }
 
-        .ca-desc {
+        .news-desc {
             font-size: 0.88rem;
             color: var(--text-subtle);
             line-height: 1.5;
             margin-bottom: 12px;
         }
 
-        .news-date, .ca-footer {
+        .news-date {
             font-size: 0.75rem;
             color: var(--text-subtle);
             border-top: 1px dashed var(--card-border);
@@ -405,13 +466,12 @@
             align-items: center;
         }
 
-        .ca-link {
+        .news-link {
             color: var(--accent-blue);
             text-decoration: none;
             font-weight: 600;
         }
 
-        /* Loading Sentinel */
         .loading-sentinel {
             text-align: center;
             padding: 24px;
@@ -432,10 +492,19 @@
             width: 100%;
         }
 
-        @media (max-width: 480px) {
-            .header-content {
-                gap: 6px;
+        @media (max-width: 900px) {
+            .section-nav {
+                grid-template-columns: repeat(3, 1fr);
             }
+        }
+
+        @media (max-width: 580px) {
+            .section-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
             .logo {
                 font-size: 1.2rem;
             }
@@ -443,7 +512,7 @@
                 padding: 5px 10px;
                 font-size: 0.72rem;
             }
-            .news-grid, .ca-list {
+            .news-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -491,13 +560,25 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
+    <!-- Navigation Tabs with Unique Color Classes -->
     <div class="section-nav">
-        <button class="nav-tab active" onclick="switchSection('newsSection', this)">
+        <button class="nav-tab tab-ca active" onclick="switchSection('caSection', this)">
+            📌 Current Affairs
+        </button>
+        <button class="nav-tab tab-bengali" onclick="switchSection('newsSection', this)">
             📰 Bengali News
         </button>
-        <button class="nav-tab" onclick="switchSection('caSection', this)">
-            📌 Current Affairs
+        <button class="nav-tab tab-hindi" onclick="switchSection('hindiSection', this)">
+            🇮🇳 Hindi News
+        </button>
+        <button class="nav-tab tab-stock" onclick="switchSection('stockSection', this)">
+            📈 Stock Market
+        </button>
+        <button class="nav-tab tab-ent" onclick="switchSection('entSection', this)">
+            🎬 Entertainment
+        </button>
+        <button class="nav-tab tab-sports" onclick="switchSection('sportsSection', this)">
+            ⚽ Sports News
         </button>
     </div>
 
@@ -510,31 +591,64 @@
     <!-- Main Container -->
     <div class="main-container">
 
-        <!-- SECTION 1: LIVE BENGALI NEWS GRID -->
-        <section id="newsSection" class="content-section active">
+        <!-- SECTION 1: CURRENT AFFAIRS -->
+        <section id="caSection" class="content-section active">
+            <div class="news-grid" id="caList"></div>
+            <div class="loading-sentinel" id="caLoader">Fetching latest current affairs...</div>
+        </section>
+
+        <!-- SECTION 2: BENGALI NEWS -->
+        <section id="newsSection" class="content-section">
             <div class="news-grid" id="newsGrid"></div>
             <div class="loading-sentinel" id="newsLoader">Fetching live daily updates...</div>
         </section>
 
-        <!-- SECTION 2: ENGLISH CURRENT AFFAIRS GRID -->
-        <section id="caSection" class="content-section">
-            <div class="ca-list" id="caList"></div>
-            <div class="loading-sentinel" id="caLoader">Fetching latest current affairs...</div>
+        <!-- SECTION 3: HINDI NEWS -->
+        <section id="hindiSection" class="content-section">
+            <div class="news-grid" id="hindiList"></div>
+            <div class="loading-sentinel" id="hindiLoader">Fetching live Hindi news...</div>
+        </section>
+
+        <!-- SECTION 4: STOCK MARKET NEWS -->
+        <section id="stockSection" class="content-section">
+            <div class="news-grid" id="stockList"></div>
+            <div class="loading-sentinel" id="stockLoader">Fetching latest market trends...</div>
+        </section>
+
+        <!-- SECTION 5: ENTERTAINMENT NEWS -->
+        <section id="entSection" class="content-section">
+            <div class="news-grid" id="entList"></div>
+            <div class="loading-sentinel" id="entLoader">Fetching movie & celeb updates...</div>
+        </section>
+
+        <!-- SECTION 6: SPORTS NEWS -->
+        <section id="sportsSection" class="content-section">
+            <div class="news-grid" id="sportsList"></div>
+            <div class="loading-sentinel" id="sportsLoader">Fetching live ESPN sports updates...</div>
         </section>
 
     </div>
 
     <footer>
-        <p>Zune Pulse &copy; Real-Time News & Daily Current Affairs Portal</p>
+        <p>Zune Pulse &copy; Real-Time News, Markets, Entertainment & Sports Portal</p>
     </footer>
 
     <script>
         let bengaliNews = [];
         let englishCA = [];
+        let hindiNews = [];
+        let stockNews = [];
+        let entNews = [];
+        let sportsNews = [];
 
         let newsVisibleCount = 0;
         let caVisibleCount = 0;
-        let activeTab = 'newsSection';
+        let hindiVisibleCount = 0;
+        let stockVisibleCount = 0;
+        let entVisibleCount = 0;
+        let sportsVisibleCount = 0;
+
+        let activeTab = 'caSection';
         let isLoading = false;
 
         function toggleStickyDrawer() {
@@ -578,22 +692,46 @@
             checkAndLoadMore();
         }
 
+        /* Feeds Configurations */
+        const englishCAFeeds = [
+            { name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
+            { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' },
+            { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }
+        ];
+
+        const sportsFeeds = [
+            { name: 'ESPN India', url: 'https://www.espn.in/espn/rss/news' }
+        ];
+
         const bengaliFeeds = [
             { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/west-bengal-rss-1.727192' },
-            { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/national-rss-1.727196' },
             { name: 'Sangbad Pratidin', url: 'https://www.sangbadpratidin.in/feed/' },
             { name: 'ABP Ananda', url: 'https://bengali.abplive.com/home/feed' },
             { name: 'Aaj Tak Bangla', url: 'https://bangla.aajtak.in/rss/feeds' }
         ];
 
-        const englishCAFeeds = [
-            { name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
-            { name: 'The Hindu', url: 'https://www.thehindu.com/news/international/feeder/default.rss' },
-            { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' },
-            { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }
+        const hindiFeeds = [
+            { name: 'ABP News Hindi', url: 'https://hindi.abplive.com/home/feed' },
+            { name: 'NDTV Khabar', url: 'https://feeds.feedburner.com/ndtvkhabar' },
+            { name: 'News18 India', url: 'https://hindi.news18.com/rss/khabar.xml' },
+            { name: 'Live Hindustan', url: 'https://www.livehindustan.com/rss/national/rssfeed.xml' },
+            { name: 'Amar Ujala', url: 'https://www.amarujala.com/rss/india-news.xml' }
         ];
 
-        async function fetchWithTimeout(url, timeoutMs = 4000) {
+        const stockFeeds = [
+            { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms' },
+            { name: 'Moneycontrol', url: 'https://www.moneycontrol.com/rss/MCtopnews.xml' },
+            { name: 'Livemint', url: 'https://www.livemint.com/rss/markets' }
+        ];
+
+        const entertainmentFeeds = [
+            { name: 'Bollywood Hungama', url: 'https://www.bollywoodhungama.com/feed/' },
+            { name: 'Pinkvilla', url: 'https://www.pinkvilla.com/feed' },
+            { name: 'Indian Express Cinema', url: 'https://indianexpress.com/section/entertainment/feed/' },
+            { name: 'Anandabazar Cinema', url: 'https://www.anandabazar.com/rss/entertainment-rss-1.727202' }
+        ];
+
+        async function fetchWithTimeout(url, timeoutMs = 6000) {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), timeoutMs);
             try {
@@ -606,78 +744,15 @@
             }
         }
 
-        async function fetchSingleBengaliFeed(feed) {
-            const cacheBuster = Date.now();
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
+        async function fetchGenericFeed(feed) {
+            const timestamp = new Date().getTime();
             
+            // Tier 1: rss2json
+            const primaryApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&nocache=${timestamp}`;
             try {
-                const res = await fetchWithTimeout(apiUrl);
+                const res = await fetchWithTimeout(primaryApi, 5000);
                 const data = await res.json();
-                if (data && data.items) {
-                    return data.items.map(item => ({
-                        title: item.title,
-                        link: item.link,
-                        pubDate: item.pubDate,
-                        source: feed.name
-                    }));
-                }
-            } catch (e) {
-                try {
-                    const fallbackUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
-                    const res = await fetchWithTimeout(fallbackUrl);
-                    const xmlText = await res.text();
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-                    const xmlItems = xmlDoc.querySelectorAll("item");
-                    let items = [];
-                    xmlItems.forEach(item => {
-                        const title = item.querySelector("title")?.textContent || '';
-                        const link = item.querySelector("link")?.textContent || '';
-                        const pubDate = item.querySelector("pubDate")?.textContent || '';
-                        if (title) items.push({ title, link, pubDate, source: feed.name });
-                    });
-                    return items;
-                } catch (fallbackErr) {
-                    return [];
-                }
-            }
-            return [];
-        }
-
-        async function fetchBengaliNews() {
-            bengaliNews = [];
-            const promises = bengaliFeeds.map(feed => fetchSingleBengaliFeed(feed));
-            const results = await Promise.allSettled(promises);
-
-            results.forEach(res => {
-                if (res.status === 'fulfilled' && Array.isArray(res.value)) {
-                    bengaliNews.push(...res.value);
-                }
-            });
-
-            const uniqueMap = new Map();
-            bengaliNews.forEach(item => {
-                if (item.title && !uniqueMap.has(item.title)) {
-                    uniqueMap.set(item.title, item);
-                }
-            });
-
-            bengaliNews = Array.from(uniqueMap.values());
-            bengaliNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-            newsVisibleCount = 0;
-            document.getElementById('newsGrid').innerHTML = '';
-            renderMoreNews(50);
-            updateTimestampDisplay();
-        }
-
-        async function fetchSingleEnglishFeed(feed) {
-            const cacheBuster = Date.now();
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_cb=${cacheBuster}`;
-            try {
-                const res = await fetchWithTimeout(apiUrl);
-                const data = await res.json();
-                if (data && data.items) {
+                if (data && data.status === 'ok' && data.items && data.items.length > 0) {
                     return data.items.map(item => ({
                         title: item.title,
                         link: item.link,
@@ -686,122 +761,174 @@
                         description: item.description || item.content || ''
                     }));
                 }
-            } catch (e) {
-                return [];
-            }
+            } catch (e) {}
+
+            // Tier 2: corsproxy.io direct XML parsing
+            try {
+                const corsApi = `https://corsproxy.io/?${encodeURIComponent(feed.url)}`;
+                const res = await fetchWithTimeout(corsApi, 5000);
+                const textData = await res.text();
+                if (textData) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(textData, "text/xml");
+                    const items = Array.from(xmlDoc.querySelectorAll("item"));
+                    if (items.length > 0) {
+                        return items.map(item => ({
+                            title: item.querySelector("title")?.textContent || '',
+                            link: item.querySelector("link")?.textContent || '',
+                            pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString(),
+                            source: feed.name,
+                            description: item.querySelector("description")?.textContent || ''
+                        }));
+                    }
+                }
+            } catch (err) {}
+
+            // Tier 3: Allorigins proxy fallback
+            try {
+                const fallbackApi = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}&ts=${timestamp}`;
+                const res = await fetchWithTimeout(fallbackApi, 5000);
+                const data = await res.json();
+                if (data && data.contents) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+                    const items = Array.from(xmlDoc.querySelectorAll("item"));
+                    return items.map(item => ({
+                        title: item.querySelector("title")?.textContent || '',
+                        link: item.querySelector("link")?.textContent || '',
+                        pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString(),
+                        source: feed.name,
+                        description: item.querySelector("description")?.textContent || ''
+                    }));
+                }
+            } catch (err) {}
+
             return [];
         }
 
-        async function fetchEnglishCurrentAffairs() {
-            englishCA = [];
-            const promises = englishCAFeeds.map(feed => fetchSingleEnglishFeed(feed));
+        async function fetchSectionData(feedsList) {
+            let compiled = [];
+            const promises = feedsList.map(feed => fetchGenericFeed(feed));
             const results = await Promise.allSettled(promises);
 
             results.forEach(res => {
                 if (res.status === 'fulfilled' && Array.isArray(res.value)) {
-                    englishCA.push(...res.value);
+                    compiled.push(...res.value);
                 }
             });
 
             const uniqueMap = new Map();
-            englishCA.forEach(item => {
-                if (item.title && !uniqueMap.has(item.title)) {
-                    uniqueMap.set(item.title, item);
+            compiled.forEach(item => {
+                if (item.title && !uniqueMap.has(item.title.trim())) {
+                    uniqueMap.set(item.title.trim(), item);
                 }
             });
-            englishCA = Array.from(uniqueMap.values());
-            englishCA.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-            caVisibleCount = 0;
-            document.getElementById('caList').innerHTML = '';
-            renderMoreCA(50);
-            updateTimestampDisplay();
+            let finalData = Array.from(uniqueMap.values());
+            finalData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+            return finalData;
         }
 
-        function renderMoreNews(batchCount = 18) {
-            const grid = document.getElementById('newsGrid');
-            const loader = document.getElementById('newsLoader');
+        async function loadAllFeeds() {
+            englishCA = await fetchSectionData(englishCAFeeds);
+            caVisibleCount = 0;
+            document.getElementById('caList').innerHTML = '';
+            renderMoreItems(englishCA, 'caList', 'caLoader', 'caVisibleCount', 18, 'card-ca', 'Current Affairs', 'tag-ca');
+            updateTimestampDisplay();
 
-            if (bengaliNews.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No new updates available right now.</div>';
+            // Load remaining sections asynchronously
+            Promise.all([
+                fetchSectionData(bengaliFeeds).then(data => {
+                    bengaliNews = data;
+                    newsVisibleCount = 0;
+                    document.getElementById('newsGrid').innerHTML = '';
+                    renderMoreItems(bengaliNews, 'newsGrid', 'newsLoader', 'newsVisibleCount', 18);
+                }),
+                fetchSectionData(hindiFeeds).then(data => {
+                    hindiNews = data;
+                    hindiVisibleCount = 0;
+                    document.getElementById('hindiList').innerHTML = '';
+                    renderMoreItems(hindiNews, 'hindiList', 'hindiLoader', 'hindiVisibleCount', 18, 'card-hindi', 'Hindi News', 'tag-hindi');
+                }),
+                fetchSectionData(stockFeeds).then(data => {
+                    stockNews = data;
+                    stockVisibleCount = 0;
+                    document.getElementById('stockList').innerHTML = '';
+                    renderMoreItems(stockNews, 'stockList', 'stockLoader', 'stockVisibleCount', 18, 'card-stock', 'Stock Market', 'tag-stock');
+                }),
+                fetchSectionData(entertainmentFeeds).then(data => {
+                    entNews = data;
+                    entVisibleCount = 0;
+                    document.getElementById('entList').innerHTML = '';
+                    renderMoreItems(entNews, 'entList', 'entLoader', 'entVisibleCount', 18, 'card-ent', 'Entertainment', 'tag-ent');
+                }),
+                fetchSectionData(sportsFeeds).then(data => {
+                    sportsNews = data;
+                    sportsVisibleCount = 0;
+                    document.getElementById('sportsList').innerHTML = '';
+                    renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports');
+                })
+            ]);
+        }
+
+        function renderMoreItems(dataList, containerId, loaderId, counterVarName, batchCount = 18, cardClass = '', tagLabel = '', tagClass = '') {
+            const container = document.getElementById(containerId);
+            const loader = document.getElementById(loaderId);
+
+            let visibleCount = counterVarName === 'newsVisibleCount' ? newsVisibleCount :
+                               counterVarName === 'caVisibleCount' ? caVisibleCount :
+                               counterVarName === 'sportsVisibleCount' ? sportsVisibleCount :
+                               counterVarName === 'hindiVisibleCount' ? hindiVisibleCount :
+                               counterVarName === 'stockVisibleCount' ? stockVisibleCount : entVisibleCount;
+
+            if (!dataList || dataList.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No updates available right now. Click "Refresh Now".</div>';
                 loader.style.display = 'none';
                 return;
+            } else {
+                loader.style.display = 'block';
             }
 
-            const nextBatch = bengaliNews.slice(newsVisibleCount, newsVisibleCount + batchCount);
+            const nextBatch = dataList.slice(visibleCount, visibleCount + batchCount);
 
             nextBatch.forEach(item => {
+                let cleanDesc = item.description ? item.description.replace(/<[^>]*>?/gm, '').trim() : '';
+                let words = cleanDesc.split(/\s+/);
+                let summaryText = words.length > 25 ? words.slice(0, 25).join(' ') + '...' : cleanDesc;
+
                 const card = document.createElement('div');
-                card.className = 'news-card';
+                card.className = `news-card ${cardClass}`;
                 card.innerHTML = `
                     <div>
-                        <div class="news-source">📌 ${escapeHtml(item.source)}</div>
+                        <div class="news-source">
+                            <span>📌 ${escapeHtml(item.source)}</span>
+                            ${tagLabel ? `<span class="news-tag ${tagClass}">${tagLabel}</span>` : ''}
+                        </div>
                         <div class="news-title">
                             <a href="${item.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
                         </div>
+                        ${summaryText ? `<div class="news-desc">${escapeHtml(summaryText)}</div>` : ''}
                     </div>
-                    <div class="news-date">🕒 ${formatDate(item.pubDate)}</div>
-                `;
-                grid.appendChild(card);
-            });
-
-            newsVisibleCount += nextBatch.length;
-
-            if (newsVisibleCount >= bengaliNews.length) {
-                loader.innerText = 'You are all caught up with live news for today.';
-            } else {
-                loader.innerText = `Showing ${newsVisibleCount} of ${bengaliNews.length} news — Scroll for more...`;
-            }
-        }
-
-        function renderMoreCA(batchCount = 18) {
-            const caList = document.getElementById('caList');
-            const loader = document.getElementById('caLoader');
-
-            if (englishCA.length === 0) {
-                caList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No current affairs available.</div>';
-                loader.style.display = 'none';
-                return;
-            }
-
-            const nextBatch = englishCA.slice(caVisibleCount, caVisibleCount + batchCount);
-
-            nextBatch.forEach(item => {
-                let cleanDesc = item.description.replace(/<[^>]*>?/gm, '').trim();
-                let words = cleanDesc.split(/\s+/);
-                let summaryText = words.length > 30 ? words.slice(0, 30).join(' ') + '...' : cleanDesc;
-
-                if (!summaryText || summaryText.length < 15) {
-                    summaryText = `${item.title} — Key daily national update for competitive exams and general awareness. Read full story below.`;
-                }
-
-                const card = document.createElement('div');
-                card.className = 'ca-card';
-                card.innerHTML = `
-                    <div>
-                        <div class="ca-header">
-                            <span class="ca-tag">Current Affairs</span>
-                            <span style="font-size:0.75rem; color:var(--text-subtle);">${formatDate(item.pubDate)}</span>
-                        </div>
-                        <div class="ca-title">
-                            <a href="${item.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
-                        </div>
-                        <div class="ca-desc">${escapeHtml(summaryText)}</div>
-                    </div>
-                    <div class="ca-footer">
-                        <span>Source: ${escapeHtml(item.source)}</span>
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="ca-link">Read More →</a>
+                    <div class="news-date">
+                        <span>🕒 ${formatDate(item.pubDate)}</span>
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-link">Read →</a>
                     </div>
                 `;
-                caList.appendChild(card);
+                container.appendChild(card);
             });
 
-            caVisibleCount += nextBatch.length;
+            let updatedCount = visibleCount + nextBatch.length;
+            if (counterVarName === 'newsVisibleCount') newsVisibleCount = updatedCount;
+            if (counterVarName === 'caVisibleCount') caVisibleCount = updatedCount;
+            if (counterVarName === 'sportsVisibleCount') sportsVisibleCount = updatedCount;
+            if (counterVarName === 'hindiVisibleCount') hindiVisibleCount = updatedCount;
+            if (counterVarName === 'stockVisibleCount') stockVisibleCount = updatedCount;
+            if (counterVarName === 'entVisibleCount') entVisibleCount = updatedCount;
 
-            if (caVisibleCount >= englishCA.length) {
-                loader.innerText = 'You are all caught up with live current affairs for today.';
+            if (updatedCount >= dataList.length) {
+                loader.innerText = 'You are all caught up for today.';
             } else {
-                loader.innerText = `Showing ${caVisibleCount} of ${englishCA.length} updates — Scroll for more...`;
+                loader.innerText = `Showing ${updatedCount} of ${dataList.length} updates — Scroll for more...`;
             }
         }
 
@@ -813,10 +940,18 @@
 
             if (scrollPosition >= threshold) {
                 isLoading = true;
-                if (activeTab === 'newsSection' && newsVisibleCount < bengaliNews.length) {
-                    renderMoreNews(18);
-                } else if (activeTab === 'caSection' && caVisibleCount < englishCA.length) {
-                    renderMoreCA(18);
+                if (activeTab === 'caSection' && caVisibleCount < englishCA.length) {
+                    renderMoreItems(englishCA, 'caList', 'caLoader', 'caVisibleCount', 18, 'card-ca', 'Current Affairs', 'tag-ca');
+                } else if (activeTab === 'newsSection' && newsVisibleCount < bengaliNews.length) {
+                    renderMoreItems(bengaliNews, 'newsGrid', 'newsLoader', 'newsVisibleCount', 18);
+                } else if (activeTab === 'hindiSection' && hindiVisibleCount < hindiNews.length) {
+                    renderMoreItems(hindiNews, 'hindiList', 'hindiLoader', 'hindiVisibleCount', 18, 'card-hindi', 'Hindi News', 'tag-hindi');
+                } else if (activeTab === 'stockSection' && stockVisibleCount < stockNews.length) {
+                    renderMoreItems(stockNews, 'stockList', 'stockLoader', 'stockVisibleCount', 18, 'card-stock', 'Stock Market', 'tag-stock');
+                } else if (activeTab === 'entSection' && entVisibleCount < entNews.length) {
+                    renderMoreItems(entNews, 'entList', 'entLoader', 'entVisibleCount', 18, 'card-ent', 'Entertainment', 'tag-ent');
+                } else if (activeTab === 'sportsSection' && sportsVisibleCount < sportsNews.length) {
+                    renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports');
                 }
                 setTimeout(() => { isLoading = false; }, 200);
             }
@@ -825,7 +960,7 @@
         function formatDate(dateStr) {
             if (!dateStr) return 'Today';
             const d = new Date(dateStr);
-            return isNaN(d) ? 'Today' : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            return isNaN(d) ? 'Today' : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
         }
 
         function escapeHtml(text) {
@@ -840,8 +975,7 @@
 
         function forceRefreshAll() {
             document.getElementById('lastUpdatedText').innerText = 'Updating feeds live...';
-            fetchBengaliNews();
-            fetchEnglishCurrentAffairs();
+            loadAllFeeds();
         }
 
         window.onscroll = checkAndLoadMore;
@@ -852,11 +986,10 @@
             setInterval(updateAnalogClock, 1000);
             updateAnalogClock();
 
-            fetchBengaliNews();
-            fetchEnglishCurrentAffairs();
+            loadAllFeeds();
 
-            setInterval(fetchBengaliNews, 180000);
-            setInterval(fetchEnglishCurrentAffairs, 180000);
+            // Refresh every 3 minutes automatically
+            setInterval(loadAllFeeds, 180000);
         };
     </script>
 </body>
