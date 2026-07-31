@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zune Pulse - Live News, Markets & Sports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -249,6 +251,7 @@
             bottom: 50%;
             transform-origin: bottom;
             border-radius: 2px;
+            will-change: transform;
         }
 
         .hour-hand { width: 2px; height: 9px; background-color: var(--text-main); }
@@ -413,6 +416,7 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            contain: content;
         }
 
         .news-card:hover {
@@ -610,8 +614,14 @@
     </footer>
 
     <script>
-        let bengaliNews = [], englishCA = [], stockNews = [], entNews = [], sportsNews = [];
-        let newsVisibleCount = 0, caVisibleCount = 0, stockVisibleCount = 0, entVisibleCount = 0, sportsVisibleCount = 0;
+        const store = {
+            caSection: { feeds: [{ name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' }, { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' }, { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }], data: [], visible: 0, loaded: false, listId: 'caList', loaderId: 'caLoader', class: 'card-ca', tag: 'Current Affairs', tagClass: 'tag-ca', catKey: 'ca' },
+            newsSection: { feeds: [{ name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/west-bengal-rss-1.727192' }, { name: 'Sangbad Pratidin', url: 'https://www.sangbadpratidin.in/feed/' }, { name: 'ABP Ananda', url: 'https://bengali.abplive.com/home/feed' }, { name: 'Aaj Tak Bangla', url: 'https://bangla.aajtak.in/rss/feeds' }], data: [], visible: 0, loaded: false, listId: 'newsGrid', loaderId: 'newsLoader', class: '', tag: '', tagClass: '', catKey: 'bengali' },
+            stockSection: { feeds: [{ name: 'Economic Times', url: 'https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms' }, { name: 'Livemint', url: 'https://www.livemint.com/rss/markets' }], data: [], visible: 0, loaded: false, listId: 'stockList', loaderId: 'stockLoader', class: 'card-stock', tag: 'Stock Market', tagClass: 'tag-stock', catKey: 'stock' },
+            entSection: { feeds: [{ name: 'Bollywood Hungama', url: 'https://www.bollywoodhungama.com/feed/' }, { name: 'Pinkvilla', url: 'https://www.pinkvilla.com/feed' }], data: [], visible: 0, loaded: false, listId: 'entList', loaderId: 'entLoader', class: 'card-ent', tag: 'Entertainment', tagClass: 'tag-ent', catKey: 'ent' },
+            sportsSection: { feeds: [{ name: 'ESPN India', url: 'https://www.espn.in/espn/rss/news' }], data: [], visible: 0, loaded: false, listId: 'sportsList', loaderId: 'sportsLoader', class: 'card-sports', tag: 'ESPN Sports', tagClass: 'tag-sports', catKey: 'sports' }
+        };
+
         let activeTab = 'caSection', isLoading = false;
 
         const placeHolders = {
@@ -634,39 +644,18 @@
             document.getElementById('hourHand').style.transform = `rotate(${(((hr % 12) + min / 60) / 12) * 360}deg)`;
         }
 
-        function switchSection(sectionId, btn) {
+        async function switchSection(sectionId, btn) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             btn.classList.add('active');
             activeTab = sectionId;
+
+            if (!store[sectionId].loaded) {
+                await loadSectionData(sectionId);
+            }
             checkAndLoadMore();
         }
-
-        const englishCAFeeds = [
-            { name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
-            { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' },
-            { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }
-        ];
-
-        const sportsFeeds = [{ name: 'ESPN India', url: 'https://www.espn.in/espn/rss/news' }];
-
-        const bengaliFeeds = [
-            { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/west-bengal-rss-1.727192' },
-            { name: 'Sangbad Pratidin', url: 'https://www.sangbadpratidin.in/feed/' },
-            { name: 'ABP Ananda', url: 'https://bengali.abplive.com/home/feed' },
-            { name: 'Aaj Tak Bangla', url: 'https://bangla.aajtak.in/rss/feeds' }
-        ];
-
-        const stockFeeds = [
-            { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms' },
-            { name: 'Livemint', url: 'https://www.livemint.com/rss/markets' }
-        ];
-
-        const entertainmentFeeds = [
-            { name: 'Bollywood Hungama', url: 'https://www.bollywoodhungama.com/feed/' },
-            { name: 'Pinkvilla', url: 'https://www.pinkvilla.com/feed' }
-        ];
 
         function extractImageUrl(item) {
             if (item.enclosure && item.enclosure.link && item.enclosure.link.match(/\.(jpeg|jpg|gif|png|webp)/i)) return item.enclosure.link;
@@ -676,7 +665,7 @@
             return match ? match[1] : null;
         }
 
-        async function fetchWithTimeout(url, timeoutMs = 5000) {
+        async function fetchWithTimeout(url, timeoutMs = 3500) {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), timeoutMs);
             try {
@@ -716,12 +705,12 @@
         }
 
         async function fetchGenericFeed(feed) {
+            // Adds timestamp parameter to completely avoid old cached versions
             const timestamp = new Date().getTime();
 
-            // Tier 1: RSS2JSON API
             try {
-                const primaryApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&nocache=${timestamp}`;
-                const res = await fetchWithTimeout(primaryApi, 5000);
+                const primaryApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_t=${timestamp}`;
+                const res = await fetchWithTimeout(primaryApi, 3500);
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.status === 'ok' && data.items && data.items.length > 0) {
@@ -737,27 +726,12 @@
                 }
             } catch (e) {}
 
-            // Tier 2: CORSProxy
             try {
-                const proxyApi = `https://corsproxy.io/?${encodeURIComponent(feed.url)}`;
-                const res = await fetchWithTimeout(proxyApi, 5000);
+                const proxyApi = `https://corsproxy.io/?${encodeURIComponent(feed.url)}&_t=${timestamp}`;
+                const res = await fetchWithTimeout(proxyApi, 3500);
                 if (res.ok) {
                     const text = await res.text();
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(text, "text/xml");
-                    const items = Array.from(xmlDoc.querySelectorAll("item"));
-                    if (items.length > 0) return parseXmlItems(items, feed.name);
-                }
-            } catch (e) {}
-
-            // Tier 3: CodeTabs
-            try {
-                const fallbackApi = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(feed.url)}`;
-                const res = await fetchWithTimeout(fallbackApi, 5000);
-                if (res.ok) {
-                    const text = await res.text();
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(text, "text/xml");
+                    const xmlDoc = new DOMParser().parseFromString(text, "text/xml");
                     const items = Array.from(xmlDoc.querySelectorAll("item"));
                     if (items.length > 0) return parseXmlItems(items, feed.name);
                 }
@@ -766,16 +740,19 @@
             return [];
         }
 
-        async function fetchSectionData(feedsList) {
-            let compiled = [];
-            const promises = feedsList.map(feed => fetchGenericFeed(feed));
+        async function loadSectionData(sectionKey, isBackground = false) {
+            const sec = store[sectionKey];
+            const promises = sec.feeds.map(feed => fetchGenericFeed(feed));
             const results = await Promise.allSettled(promises);
 
+            let compiled = [];
             results.forEach(res => {
                 if (res.status === 'fulfilled' && Array.isArray(res.value)) {
                     compiled.push(...res.value);
                 }
             });
+
+            if (compiled.length === 0) return;
 
             const uniqueMap = new Map();
             compiled.forEach(item => {
@@ -784,83 +761,64 @@
                 }
             });
 
-            let finalData = Array.from(uniqueMap.values());
-            finalData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-            return finalData;
-        }
+            const freshData = Array.from(uniqueMap.values()).sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
-        async function loadAllFeeds() {
-            englishCA = await fetchSectionData(englishCAFeeds);
-            caVisibleCount = 0;
-            document.getElementById('caList').innerHTML = '';
-            renderMoreItems(englishCA, 'caList', 'caLoader', 'caVisibleCount', 18, 'card-ca', 'Current Affairs', 'tag-ca', 'ca');
+            if (isBackground && sec.data.length > 0) {
+                // Prepend brand new items that weren't in the list before
+                const existingTitles = new Set(sec.data.map(i => i.title));
+                const brandNewItems = freshData.filter(i => !existingTitles.has(i.title));
+                if (brandNewItems.length > 0) {
+                    sec.data = [...brandNewItems, ...sec.data];
+                    if (activeTab === sectionKey) {
+                        document.getElementById(sec.listId).innerHTML = '';
+                        sec.visible = 0;
+                        renderMoreItems(sectionKey, Math.max(18, sec.visible));
+                    }
+                }
+            } else {
+                sec.data = freshData;
+                sec.visible = 0;
+                sec.loaded = true;
+                if (activeTab === sectionKey) {
+                    document.getElementById(sec.listId).innerHTML = '';
+                    renderMoreItems(sectionKey, 18);
+                }
+            }
             updateTimestampDisplay();
-
-            Promise.all([
-                fetchSectionData(bengaliFeeds).then(data => {
-                    bengaliNews = data;
-                    newsVisibleCount = 0;
-                    document.getElementById('newsGrid').innerHTML = '';
-                    renderMoreItems(bengaliNews, 'newsGrid', 'newsLoader', 'newsVisibleCount', 18, '', '', '', 'bengali');
-                }),
-                fetchSectionData(stockFeeds).then(data => {
-                    stockNews = data;
-                    stockVisibleCount = 0;
-                    document.getElementById('stockList').innerHTML = '';
-                    renderMoreItems(stockNews, 'stockList', 'stockLoader', 'stockVisibleCount', 18, 'card-stock', 'Stock Market', 'tag-stock', 'stock');
-                }),
-                fetchSectionData(entertainmentFeeds).then(data => {
-                    entNews = data;
-                    entVisibleCount = 0;
-                    document.getElementById('entList').innerHTML = '';
-                    renderMoreItems(entNews, 'entList', 'entLoader', 'entVisibleCount', 18, 'card-ent', 'Entertainment', 'tag-ent', 'ent');
-                }),
-                fetchSectionData(sportsFeeds).then(data => {
-                    sportsNews = data;
-                    sportsVisibleCount = 0;
-                    document.getElementById('sportsList').innerHTML = '';
-                    renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports', 'sports');
-                })
-            ]);
         }
 
-        function renderMoreItems(dataList, containerId, loaderId, counterVarName, batchCount = 18, cardClass = '', tagLabel = '', tagClass = '', catKey = 'ca') {
-            const container = document.getElementById(containerId);
-            const loader = document.getElementById(loaderId);
+        function renderMoreItems(sectionKey, batchCount = 18) {
+            const sec = store[sectionKey];
+            const container = document.getElementById(sec.listId);
+            const loader = document.getElementById(sec.loaderId);
 
-            let visibleCount = counterVarName === 'newsVisibleCount' ? newsVisibleCount :
-                               counterVarName === 'caVisibleCount' ? caVisibleCount :
-                               counterVarName === 'sportsVisibleCount' ? sportsVisibleCount :
-                               counterVarName === 'stockVisibleCount' ? stockVisibleCount : entVisibleCount;
-
-            if (!dataList || dataList.length === 0) {
+            if (!sec.data || sec.data.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No updates available right now. Click "Refresh Now".</div>';
                 loader.style.display = 'none';
                 return;
-            } else {
-                loader.style.display = 'block';
             }
 
-            const nextBatch = dataList.slice(visibleCount, visibleCount + batchCount);
+            loader.style.display = 'block';
+            const nextBatch = sec.data.slice(sec.visible, sec.visible + batchCount);
+            const fragment = document.createDocumentFragment();
 
             nextBatch.forEach(item => {
                 let cleanDesc = item.description ? item.description.replace(/<[^>]*>?/gm, '').trim() : '';
                 let words = cleanDesc.split(/\s+/);
                 let summaryText = words.length > 25 ? words.slice(0, 25).join(' ') + '...' : cleanDesc;
-
-                const imgSrc = item.image ? item.image : placeHolders[catKey];
+                const imgSrc = item.image ? item.image : placeHolders[sec.catKey];
 
                 const card = document.createElement('div');
-                card.className = `news-card ${cardClass}`;
+                card.className = `news-card ${sec.class}`;
                 card.innerHTML = `
                     <div class="card-img-container">
-                        <img class="card-img" src="${imgSrc}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.onerror=null;this.src='${placeHolders[catKey]}';">
+                        <img class="card-img" src="${imgSrc}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${placeHolders[sec.catKey]}';">
                     </div>
                     <div class="card-body">
                         <div>
                             <div class="news-source">
                                 <span>📌 ${escapeHtml(item.source)}</span>
-                                ${tagLabel ? `<span class="news-tag ${tagClass}">${tagLabel}</span>` : ''}
+                                ${sec.tag ? `<span class="news-tag ${sec.tagClass}">${sec.tag}</span>` : ''}
                             </div>
                             <div class="news-title">
                                 <a href="${item.link}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
@@ -873,20 +831,16 @@
                         </div>
                     </div>
                 `;
-                container.appendChild(card);
+                fragment.appendChild(card);
             });
 
-            let updatedCount = visibleCount + nextBatch.length;
-            if (counterVarName === 'newsVisibleCount') newsVisibleCount = updatedCount;
-            if (counterVarName === 'caVisibleCount') caVisibleCount = updatedCount;
-            if (counterVarName === 'sportsVisibleCount') sportsVisibleCount = updatedCount;
-            if (counterVarName === 'stockVisibleCount') stockVisibleCount = updatedCount;
-            if (counterVarName === 'entVisibleCount') entVisibleCount = updatedCount;
+            container.appendChild(fragment);
+            sec.visible += nextBatch.length;
 
-            if (updatedCount >= dataList.length) {
+            if (sec.visible >= sec.data.length) {
                 loader.innerText = 'You are all caught up for today.';
             } else {
-                loader.innerText = `Showing ${updatedCount} of ${dataList.length} updates — Scroll for more...`;
+                loader.innerText = `Showing ${sec.visible} of ${sec.data.length} updates — Scroll for more...`;
             }
         }
 
@@ -897,16 +851,9 @@
 
             if (scrollPosition >= threshold) {
                 isLoading = true;
-                if (activeTab === 'caSection' && caVisibleCount < englishCA.length) {
-                    renderMoreItems(englishCA, 'caList', 'caLoader', 'caVisibleCount', 18, 'card-ca', 'Current Affairs', 'tag-ca', 'ca');
-                } else if (activeTab === 'newsSection' && newsVisibleCount < bengaliNews.length) {
-                    renderMoreItems(bengaliNews, 'newsGrid', 'newsLoader', 'newsVisibleCount', 18, '', '', '', 'bengali');
-                } else if (activeTab === 'stockSection' && stockVisibleCount < stockNews.length) {
-                    renderMoreItems(stockNews, 'stockList', 'stockLoader', 'stockVisibleCount', 18, 'card-stock', 'Stock Market', 'tag-stock', 'stock');
-                } else if (activeTab === 'entSection' && entVisibleCount < entNews.length) {
-                    renderMoreItems(entNews, 'entList', 'entLoader', 'entVisibleCount', 18, 'card-ent', 'Entertainment', 'tag-ent', 'ent');
-                } else if (activeTab === 'sportsSection' && sportsVisibleCount < sportsNews.length) {
-                    renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports', 'sports');
+                const sec = store[activeTab];
+                if (sec.loaded && sec.visible < sec.data.length) {
+                    renderMoreItems(activeTab, 18);
                 }
                 setTimeout(() => { isLoading = false; }, 200);
             }
@@ -930,7 +877,19 @@
 
         function forceRefreshAll() {
             document.getElementById('lastUpdatedText').innerText = 'Updating feeds live...';
-            loadAllFeeds();
+            Object.keys(store).forEach(k => { store[k].loaded = false; });
+            loadSectionData(activeTab);
+        }
+
+        // Automatic background live poller to fetch updates whenever new items drop
+        function startBackgroundPoller() {
+            setInterval(() => {
+                Object.keys(store).forEach(sectionKey => {
+                    if (store[sectionKey].loaded) {
+                        loadSectionData(sectionKey, true);
+                    }
+                });
+            }, 300000); // Checks every 5 minutes
         }
 
         window.onscroll = checkAndLoadMore;
@@ -940,8 +899,8 @@
             loadNote();
             setInterval(updateAnalogClock, 1000);
             updateAnalogClock();
-            loadAllFeeds();
-            setInterval(loadAllFeeds, 180000);
+            loadSectionData('caSection');
+            startBackgroundPoller();
         };
     </script>
 </body>
