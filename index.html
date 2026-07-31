@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zune Pulse - Live News, Markets, Entertainment & Sports</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
+    <title>Zune Pulse - Live News, Markets, Jobs & Sports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Atma:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #080c14;
             --card-bg: rgba(19, 27, 46, 0.75);
-            --card-hover: rgba(28, 39, 64, 0.85);
-            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(28, 39, 64, 0.9);
+            --card-border: rgba(255, 255, 255, 0.08);
             --text-main: #f3f4f6;
             --text-subtle: #9ca3af;
             --accent: #10b981;
@@ -25,7 +25,10 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        html { scroll-behavior: smooth; }
 
         html, body {
             width: 100%;
@@ -50,7 +53,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Header Bar */
         header {
             background-color: var(--header-bg);
             border-bottom: 1px solid var(--card-border);
@@ -88,11 +90,11 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .logo span {
-            color: var(--accent);
-        }
+        .logo:active { transform: scale(0.95); }
+        .logo span { color: var(--accent); }
 
         .live-badge {
             background: rgba(16, 185, 129, 0.15);
@@ -125,7 +127,7 @@
             background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
             color: #0f172a;
             border: none;
-            padding: 6px 14px;
+            padding: 7px 15px;
             border-radius: 20px;
             font-family: inherit;
             font-weight: 700;
@@ -134,9 +136,17 @@
             box-shadow: 0 4px 12px rgba(250, 204, 21, 0.25);
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
+        .sticky-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 18px rgba(250, 204, 21, 0.4);
+        }
+
+        .sticky-btn:active { transform: translateY(1px) scale(0.94); }
 
         .sticky-drawer {
             display: none;
@@ -144,18 +154,23 @@
             top: 60px;
             left: 14px;
             width: calc(100% - 28px);
-            max-width: 300px;
+            max-width: 320px;
             background: #fef08a;
             color: #0f172a;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 14px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.6);
             z-index: 1001;
+            transform-origin: top left;
+            animation: drawerOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .sticky-drawer.active {
-            display: block;
+        @keyframes drawerOpen {
+            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
+
+        .sticky-drawer.active { display: block; }
 
         .sticky-drawer-header {
             display: flex;
@@ -169,16 +184,22 @@
         }
 
         .sticky-close {
-            background: none;
+            background: rgba(0, 0, 0, 0.08);
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
             cursor: pointer;
             color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sticky-textarea {
             width: 100%;
-            height: 120px;
+            height: 130px;
             background: transparent;
             border: none;
             resize: none;
@@ -234,10 +255,9 @@
         .minute-hand { width: 1.5px; height: 12px; background-color: var(--accent-blue); }
         .second-hand { width: 1px; height: 14px; background-color: #f43f5e; }
 
-        /* Navigation Grid */
         .section-nav {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(7, 1fr);
             gap: 8px;
             margin: 20px auto 10px auto;
             max-width: 1140px;
@@ -247,8 +267,8 @@
 
         .nav-tab {
             padding: 10px 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.78rem;
+            font-weight: 700;
             font-family: 'Plus Jakarta Sans', sans-serif;
             border-radius: 12px;
             cursor: pointer;
@@ -258,11 +278,14 @@
             text-align: center;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            transition: all 0.25s ease;
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
             white-space: nowrap;
+            user-select: none;
+            outline: none;
         }
 
-        /* Unique Tab Styling per Section */
+        .nav-tab:active { transform: scale(0.92) !important; }
+
         .nav-tab.tab-ca {
             background-color: rgba(16, 185, 129, 0.12);
             color: #6ee7b7;
@@ -272,7 +295,7 @@
             background-color: #10b981;
             color: #ffffff;
             border-color: #10b981;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
         }
 
         .nav-tab.tab-bengali {
@@ -284,7 +307,7 @@
             background-color: #0284c7;
             color: #ffffff;
             border-color: #0284c7;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45);
         }
 
         .nav-tab.tab-hindi {
@@ -296,7 +319,7 @@
             background-color: #9333ea;
             color: #ffffff;
             border-color: #9333ea;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+            box-shadow: 0 4px 18px rgba(147, 51, 234, 0.45);
         }
 
         .nav-tab.tab-stock {
@@ -308,7 +331,7 @@
             background-color: #d97706;
             color: #ffffff;
             border-color: #d97706;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+            box-shadow: 0 4px 18px rgba(217, 119, 6, 0.45);
         }
 
         .nav-tab.tab-ent {
@@ -320,7 +343,7 @@
             background-color: #db2777;
             color: #ffffff;
             border-color: #db2777;
-            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+            box-shadow: 0 4px 18px rgba(219, 39, 119, 0.45);
         }
 
         .nav-tab.tab-sports {
@@ -332,7 +355,19 @@
             background-color: #dc2626;
             color: #ffffff;
             border-color: #dc2626;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+            box-shadow: 0 4px 18px rgba(220, 38, 38, 0.45);
+        }
+
+        .nav-tab.tab-jobs {
+            background-color: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+        }
+        .nav-tab.tab-jobs.active, .nav-tab.tab-jobs:hover {
+            background-color: #4f46e5;
+            color: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 4px 18px rgba(79, 70, 229, 0.5);
         }
 
         .refresh-status-bar {
@@ -350,17 +385,15 @@
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             color: var(--accent-blue);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 12px;
             font-size: 0.75rem;
             cursor: pointer;
             font-weight: 600;
             backdrop-filter: blur(8px);
-            transition: background 0.2s ease;
-        }
-
-        .manual-refresh-btn:hover {
-            background: var(--card-hover);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .main-container {
@@ -373,11 +406,15 @@
 
         .content-section {
             display: none;
+            animation: fadeInSection 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .content-section.active {
-            display: block;
+        @keyframes fadeInSection {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        .content-section.active { display: block; }
 
         .news-grid {
             display: grid;
@@ -399,13 +436,13 @@
             width: 100%;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .news-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             background-color: var(--card-hover);
-            border-color: rgba(56, 189, 248, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .card-stock { border-left: 4px solid #f59e0b; }
@@ -413,8 +450,8 @@
         .card-ca { border-left: 4px solid var(--accent); }
         .card-hindi { border-left: 4px solid #a855f7; }
         .card-sports { border-left: 4px solid #ef4444; }
+        .card-jobs { border-left: 4px solid #6366f1; }
 
-        /* News Card Image Styling */
         .card-img-container {
             width: 100%;
             height: 160px;
@@ -427,12 +464,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.35s ease;
         }
 
-        .news-card:hover .card-img {
-            transform: scale(1.05);
-        }
+        .news-card:hover .card-img { transform: scale(1.06); }
 
         .card-body {
             padding: 16px;
@@ -458,12 +493,10 @@
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 0.7rem;
+            font-weight: 700;
         }
 
-        .tag-stock { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-        .tag-ent { background-color: rgba(236, 72, 153, 0.15); color: #ec4899; }
-        .tag-hindi { background-color: rgba(168, 85, 247, 0.15); color: #a855f7; }
-        .tag-sports { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .tag-jobs { background-color: rgba(99, 102, 241, 0.18); color: #818cf8; }
 
         .news-title {
             font-size: 0.98rem;
@@ -476,6 +509,8 @@
             color: var(--text-main);
             text-decoration: none;
         }
+
+        .news-title a:hover { color: var(--accent-blue); }
 
         .news-desc {
             font-size: 0.88rem;
@@ -498,7 +533,7 @@
         .news-link {
             color: var(--accent-blue);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .loading-sentinel {
@@ -521,35 +556,12 @@
             width: 100%;
         }
 
-        @media (max-width: 900px) {
-            .section-nav {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 580px) {
-            .section-nav {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.2rem;
-            }
-            .sticky-btn {
-                padding: 5px 10px;
-                font-size: 0.72rem;
-            }
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 1024px) { .section-nav { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 640px) { .section-nav { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
 
-    <!-- Sticky Note Drawer Window -->
     <div class="sticky-drawer" id="stickyDrawer">
         <div class="sticky-drawer-header">
             <span>📝 Notes</span>
@@ -558,24 +570,16 @@
         <textarea class="sticky-textarea" id="stickyNotesText" placeholder="Write notes here..." oninput="saveNote()"></textarea>
     </div>
 
-    <!-- Header Bar -->
     <header>
         <div class="header-content">
             <div class="header-left">
-                <button class="sticky-btn" onclick="toggleStickyDrawer()">
-                    📌 Notes
-                </button>
-                <a href="#" class="logo">
-                    🌐 Zune <span>Pulse</span>
-                </a>
+                <button class="sticky-btn" onclick="toggleStickyDrawer()">📌 Notes</button>
+                <a href="#" class="logo">🌐 Zune <span>Pulse</span></a>
             </div>
 
             <div class="header-right">
-                <div class="live-badge">
-                    <div class="live-dot"></div> LIVE
-                </div>
-
-                <div class="clock-widget" title="Live Clock">
+                <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+                <div class="clock-widget">
                     <div class="clock-number num-12">12</div>
                     <div class="clock-number num-3">3</div>
                     <div class="clock-number num-6">6</div>
@@ -589,158 +593,105 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
     <div class="section-nav">
-        <button class="nav-tab tab-ca active" onclick="switchSection('caSection', this)">
-            📌 Current Affairs
-        </button>
-        <button class="nav-tab tab-bengali" onclick="switchSection('newsSection', this)">
-            📰 Bengali News
-        </button>
-        <button class="nav-tab tab-hindi" onclick="switchSection('hindiSection', this)">
-            🇮🇳 Hindi News
-        </button>
-        <button class="nav-tab tab-stock" onclick="switchSection('stockSection', this)">
-            📈 Stock Market
-        </button>
-        <button class="nav-tab tab-ent" onclick="switchSection('entSection', this)">
-            🎬 Entertainment
-        </button>
-        <button class="nav-tab tab-sports" onclick="switchSection('sportsSection', this)">
-            ⚽ Sports News
-        </button>
+        <button class="nav-tab tab-ca active" onclick="switchSection('caSection', this)">📌 Current Affairs</button>
+        <button class="nav-tab tab-bengali" onclick="switchSection('newsSection', this)">📰 Bengali News</button>
+        <button class="nav-tab tab-hindi" onclick="switchSection('hindiSection', this)">🇮🇳 Hindi News</button>
+        <button class="nav-tab tab-stock" onclick="switchSection('stockSection', this)">📈 Stock Market</button>
+        <button class="nav-tab tab-ent" onclick="switchSection('entSection', this)">🎬 Entertainment</button>
+        <button class="nav-tab tab-sports" onclick="switchSection('sportsSection', this)">⚽ Sports News</button>
+        <button class="nav-tab tab-jobs" onclick="switchSection('jobsSection', this)">💼 Job Updates</button>
     </div>
 
-    <!-- Live Refresh Info Bar -->
     <div class="refresh-status-bar">
         <span id="lastUpdatedText">Last updated: Fetching latest feeds...</span>
         <button class="manual-refresh-btn" onclick="forceRefreshAll()">🔄 Refresh Now</button>
     </div>
 
-    <!-- Main Container -->
     <div class="main-container">
-
-        <!-- SECTION 1: CURRENT AFFAIRS -->
         <section id="caSection" class="content-section active">
             <div class="news-grid" id="caList"></div>
             <div class="loading-sentinel" id="caLoader">Fetching latest current affairs...</div>
         </section>
 
-        <!-- SECTION 2: BENGALI NEWS -->
         <section id="newsSection" class="content-section">
             <div class="news-grid" id="newsGrid"></div>
             <div class="loading-sentinel" id="newsLoader">Fetching live daily updates...</div>
         </section>
 
-        <!-- SECTION 3: HINDI NEWS -->
         <section id="hindiSection" class="content-section">
             <div class="news-grid" id="hindiList"></div>
             <div class="loading-sentinel" id="hindiLoader">Fetching live Hindi news...</div>
         </section>
 
-        <!-- SECTION 4: STOCK MARKET NEWS -->
         <section id="stockSection" class="content-section">
             <div class="news-grid" id="stockList"></div>
             <div class="loading-sentinel" id="stockLoader">Fetching latest market trends...</div>
         </section>
 
-        <!-- SECTION 5: ENTERTAINMENT NEWS -->
         <section id="entSection" class="content-section">
             <div class="news-grid" id="entList"></div>
             <div class="loading-sentinel" id="entLoader">Fetching movie & celeb updates...</div>
         </section>
 
-        <!-- SECTION 6: SPORTS NEWS -->
         <section id="sportsSection" class="content-section">
             <div class="news-grid" id="sportsList"></div>
             <div class="loading-sentinel" id="sportsLoader">Fetching live ESPN sports updates...</div>
         </section>
 
+        <section id="jobsSection" class="content-section">
+            <div class="news-grid" id="jobsList"></div>
+            <div class="loading-sentinel" id="jobsLoader">Fetching job updates...</div>
+        </section>
     </div>
 
     <footer>
-        <p>Zune Pulse &copy; Real-Time News, Markets, Entertainment & Sports Portal</p>
+        <p>Zune Pulse &copy; Real-Time News, Markets, Jobs & Sports Portal</p>
     </footer>
 
     <script>
-        let bengaliNews = [];
-        let englishCA = [];
-        let hindiNews = [];
-        let stockNews = [];
-        let entNews = [];
-        let sportsNews = [];
+        let bengaliNews = [], englishCA = [], hindiNews = [], stockNews = [], entNews = [], sportsNews = [], jobNews = [];
+        let newsVisibleCount = 0, caVisibleCount = 0, hindiVisibleCount = 0, stockVisibleCount = 0, entVisibleCount = 0, sportsVisibleCount = 0, jobsVisibleCount = 0;
+        let activeTab = 'caSection', isLoading = false;
 
-        let newsVisibleCount = 0;
-        let caVisibleCount = 0;
-        let hindiVisibleCount = 0;
-        let stockVisibleCount = 0;
-        let entVisibleCount = 0;
-        let sportsVisibleCount = 0;
-
-        let activeTab = 'caSection';
-        let isLoading = false;
-
-        // Fallback Placeholders for missing images
         const placeHolders = {
             'ca': 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop',
             'bengali': 'https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=600&auto=format&fit=crop',
             'hindi': 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?q=80&w=600&auto=format&fit=crop',
             'stock': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=600&auto=format&fit=crop',
             'ent': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=600&auto=format&fit=crop',
-            'sports': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop'
+            'sports': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop',
+            'jobs': 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=600&auto=format&fit=crop'
         };
 
-        function toggleStickyDrawer() {
-            const drawer = document.getElementById('stickyDrawer');
-            drawer.classList.toggle('active');
-        }
-
-        function saveNote() {
-            const text = document.getElementById('stickyNotesText').value;
-            localStorage.setItem('zune_sticky_notes', text);
-        }
-
-        function loadNote() {
-            const saved = localStorage.getItem('zune_sticky_notes');
-            if (saved) document.getElementById('stickyNotesText').value = saved;
-        }
+        function toggleStickyDrawer() { document.getElementById('stickyDrawer').classList.toggle('active'); }
+        function saveNote() { localStorage.setItem('zune_sticky_notes', document.getElementById('stickyNotesText').value); }
+        function loadNote() { const saved = localStorage.getItem('zune_sticky_notes'); if (saved) document.getElementById('stickyNotesText').value = saved; }
 
         function updateAnalogClock() {
             const now = new Date();
-            const sec = now.getSeconds();
-            const min = now.getMinutes();
-            const hr = now.getHours();
-
-            const secDeg = (sec / 60) * 360;
-            const minDeg = ((min + sec / 60) / 60) * 360;
-            const hrDeg = (((hr % 12) + min / 60) / 12) * 360;
-
-            document.getElementById('secondHand').style.transform = `rotate(${secDeg}deg)`;
-            document.getElementById('minuteHand').style.transform = `rotate(${minDeg}deg)`;
-            document.getElementById('hourHand').style.transform = `rotate(${hrDeg}deg)`;
+            const sec = now.getSeconds(), min = now.getMinutes(), hr = now.getHours();
+            document.getElementById('secondHand').style.transform = `rotate(${(sec / 60) * 360}deg)`;
+            document.getElementById('minuteHand').style.transform = `rotate(${((min + sec / 60) / 60) * 360}deg)`;
+            document.getElementById('hourHand').style.transform = `rotate(${(((hr % 12) + min / 60) / 12) * 360}deg)`;
         }
 
         function switchSection(sectionId, btn) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-            
             document.getElementById(sectionId).classList.add('active');
             btn.classList.add('active');
             activeTab = sectionId;
-
             checkAndLoadMore();
         }
 
-        /* Feeds Configurations */
         const englishCAFeeds = [
             { name: 'The Hindu', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
             { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml' },
             { name: 'The Indian Express', url: 'https://indianexpress.com/section/india/feed/' }
         ];
 
-        const sportsFeeds = [
-            { name: 'ESPN India', url: 'https://www.espn.in/espn/rss/news' }
-        ];
+        const sportsFeeds = [{ name: 'ESPN India', url: 'https://www.espn.in/espn/rss/news' }];
 
         const bengaliFeeds = [
             { name: 'Anandabazar Patrika', url: 'https://www.anandabazar.com/rss/west-bengal-rss-1.727192' },
@@ -752,43 +703,35 @@
         const hindiFeeds = [
             { name: 'ABP News Hindi', url: 'https://hindi.abplive.com/home/feed' },
             { name: 'NDTV Khabar', url: 'https://feeds.feedburner.com/ndtvkhabar' },
-            { name: 'News18 India', url: 'https://hindi.news18.com/rss/khabar.xml' },
-            { name: 'Live Hindustan', url: 'https://www.livehindustan.com/rss/national/rssfeed.xml' },
-            { name: 'Amar Ujala', url: 'https://www.amarujala.com/rss/india-news.xml' }
+            { name: 'News18 India', url: 'https://hindi.news18.com/rss/khabar.xml' }
         ];
 
         const stockFeeds = [
             { name: 'Economic Times', url: 'https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms' },
-            { name: 'Moneycontrol', url: 'https://www.moneycontrol.com/rss/MCtopnews.xml' },
             { name: 'Livemint', url: 'https://www.livemint.com/rss/markets' }
         ];
 
         const entertainmentFeeds = [
             { name: 'Bollywood Hungama', url: 'https://www.bollywoodhungama.com/feed/' },
-            { name: 'Pinkvilla', url: 'https://www.pinkvilla.com/feed' },
-            { name: 'Indian Express Cinema', url: 'https://indianexpress.com/section/entertainment/feed/' },
-            { name: 'Anandabazar Cinema', url: 'https://www.anandabazar.com/rss/entertainment-rss-1.727202' }
+            { name: 'Pinkvilla', url: 'https://www.pinkvilla.com/feed' }
         ];
 
-        /* Helper function to extract image from RSS item or HTML string */
+        const jobFeeds = [
+            { name: 'TimesJobs Alerts', url: 'https://www.timesjobs.com/rss/jobs-rss.xml' },
+            { name: 'Indian Express Jobs', url: 'https://indianexpress.com/section/jobs/feed/' },
+            { name: 'Jagran Josh Sarkari Jobs', url: 'https://www.jagranjosh.com/rss/josh/jobs_national.xml' },
+            { name: 'Livemint Career & Jobs', url: 'https://www.livemint.com/rss/industry/human-resources' }
+        ];
+
         function extractImageUrl(item) {
-            if (item.enclosure && item.enclosure.link && item.enclosure.link.match(/\.(jpeg|jpg|gif|png|webp)/i)) {
-                return item.enclosure.link;
-            }
-            if (item.thumbnail) {
-                return item.thumbnail;
-            }
-            
-            // Search description HTML for <img> tag
+            if (item.enclosure && item.enclosure.link && item.enclosure.link.match(/\.(jpeg|jpg|gif|png|webp)/i)) return item.enclosure.link;
+            if (item.thumbnail) return item.thumbnail;
             const content = item.description || item.content || '';
             const match = content.match(/<img[^>]+src=["']([^"']+)["']/i);
-            if (match && match[1]) {
-                return match[1];
-            }
-            return null;
+            return match ? match[1] : null;
         }
 
-        async function fetchWithTimeout(url, timeoutMs = 6000) {
+        async function fetchWithTimeout(url, timeoutMs = 5000) {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), timeoutMs);
             try {
@@ -801,59 +744,79 @@
             }
         }
 
+        function parseXmlItems(items, sourceName) {
+            return items.map(item => {
+                const desc = item.querySelector("description")?.textContent || item.querySelector("encoded")?.textContent || '';
+                const title = item.querySelector("title")?.textContent || '';
+                const link = item.querySelector("link")?.textContent || '';
+                const pubDate = item.querySelector("pubDate")?.textContent || new Date().toISOString();
+                const enc = item.querySelector("enclosure")?.getAttribute("url");
+                const thumb = item.querySelector("thumbnail")?.getAttribute("url");
+                
+                let imgUrl = enc || thumb;
+                if (!imgUrl) {
+                    const match = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
+                    if (match && match[1]) imgUrl = match[1];
+                }
+
+                return {
+                    title: title.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1').trim(),
+                    link: link.trim(),
+                    pubDate: pubDate,
+                    source: sourceName,
+                    description: desc.replace(/<!\[CDATA\[(.*?)\]\]>/g, '$1').trim(),
+                    image: imgUrl
+                };
+            });
+        }
+
         async function fetchGenericFeed(feed) {
             const timestamp = new Date().getTime();
-            
-            // Tier 1: rss2json
-            const primaryApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&nocache=${timestamp}`;
+
+            // Tier 1: RSS2JSON API
             try {
+                const primaryApi = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&nocache=${timestamp}`;
                 const res = await fetchWithTimeout(primaryApi, 5000);
-                const data = await res.json();
-                if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                    return data.items.map(item => ({
-                        title: item.title,
-                        link: item.link,
-                        pubDate: item.pubDate,
-                        source: feed.name,
-                        description: item.description || item.content || '',
-                        image: extractImageUrl(item)
-                    }));
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.status === 'ok' && data.items && data.items.length > 0) {
+                        return data.items.map(item => ({
+                            title: item.title,
+                            link: item.link,
+                            pubDate: item.pubDate,
+                            source: feed.name,
+                            description: item.description || item.content || '',
+                            image: extractImageUrl(item)
+                        }));
+                    }
                 }
             } catch (e) {}
 
-            // Tier 2: corsproxy.io direct XML parsing
+            // Tier 2: CORSProxy
             try {
-                const corsApi = `https://corsproxy.io/?${encodeURIComponent(feed.url)}`;
-                const res = await fetchWithTimeout(corsApi, 5000);
-                const textData = await res.text();
-                if (textData) {
+                const proxyApi = `https://corsproxy.io/?${encodeURIComponent(feed.url)}`;
+                const res = await fetchWithTimeout(proxyApi, 5000);
+                if (res.ok) {
+                    const text = await res.text();
                     const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(textData, "text/xml");
+                    const xmlDoc = parser.parseFromString(text, "text/xml");
                     const items = Array.from(xmlDoc.querySelectorAll("item"));
-                    if (items.length > 0) {
-                        return items.map(item => {
-                            const desc = item.querySelector("description")?.textContent || '';
-                            const enc = item.querySelector("enclosure")?.getAttribute("url");
-                            const thumb = item.querySelector("thumbnail")?.getAttribute("url") || item.querySelector("media\\:thumbnail, thumbnail")?.getAttribute("url");
-                            
-                            let imgUrl = enc || thumb;
-                            if (!imgUrl) {
-                                const match = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
-                                if (match && match[1]) imgUrl = match[1];
-                            }
-
-                            return {
-                                title: item.querySelector("title")?.textContent || '',
-                                link: item.querySelector("link")?.textContent || '',
-                                pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString(),
-                                source: feed.name,
-                                description: desc,
-                                image: imgUrl
-                            };
-                        });
-                    }
+                    if (items.length > 0) return parseXmlItems(items, feed.name);
                 }
-            } catch (err) {}
+            } catch (e) {}
+
+            // Tier 3: CodeTabs
+            try {
+                const fallbackApi = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(feed.url)}`;
+                const res = await fetchWithTimeout(fallbackApi, 5000);
+                if (res.ok) {
+                    const text = await res.text();
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(text, "text/xml");
+                    const items = Array.from(xmlDoc.querySelectorAll("item"));
+                    if (items.length > 0) return parseXmlItems(items, feed.name);
+                }
+            } catch (e) {}
 
             return [];
         }
@@ -888,7 +851,6 @@
             renderMoreItems(englishCA, 'caList', 'caLoader', 'caVisibleCount', 18, 'card-ca', 'Current Affairs', 'tag-ca', 'ca');
             updateTimestampDisplay();
 
-            // Load remaining sections asynchronously
             Promise.all([
                 fetchSectionData(bengaliFeeds).then(data => {
                     bengaliNews = data;
@@ -919,6 +881,12 @@
                     sportsVisibleCount = 0;
                     document.getElementById('sportsList').innerHTML = '';
                     renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports', 'sports');
+                }),
+                fetchSectionData(jobFeeds).then(data => {
+                    jobNews = data;
+                    jobsVisibleCount = 0;
+                    document.getElementById('jobsList').innerHTML = '';
+                    renderMoreItems(jobNews, 'jobsList', 'jobsLoader', 'jobsVisibleCount', 18, 'card-jobs', 'Job Notice', 'tag-jobs', 'jobs');
                 })
             ]);
         }
@@ -931,7 +899,8 @@
                                counterVarName === 'caVisibleCount' ? caVisibleCount :
                                counterVarName === 'sportsVisibleCount' ? sportsVisibleCount :
                                counterVarName === 'hindiVisibleCount' ? hindiVisibleCount :
-                               counterVarName === 'stockVisibleCount' ? stockVisibleCount : entVisibleCount;
+                               counterVarName === 'stockVisibleCount' ? stockVisibleCount :
+                               counterVarName === 'jobsVisibleCount' ? jobsVisibleCount : entVisibleCount;
 
             if (!dataList || dataList.length === 0) {
                 container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-subtle); padding: 30px 0;">No updates available right now. Click "Refresh Now".</div>';
@@ -983,6 +952,7 @@
             if (counterVarName === 'hindiVisibleCount') hindiVisibleCount = updatedCount;
             if (counterVarName === 'stockVisibleCount') stockVisibleCount = updatedCount;
             if (counterVarName === 'entVisibleCount') entVisibleCount = updatedCount;
+            if (counterVarName === 'jobsVisibleCount') jobsVisibleCount = updatedCount;
 
             if (updatedCount >= dataList.length) {
                 loader.innerText = 'You are all caught up for today.';
@@ -993,7 +963,6 @@
 
         function checkAndLoadMore() {
             if (isLoading) return;
-
             const scrollPosition = window.innerHeight + window.scrollY;
             const threshold = document.documentElement.offsetHeight - 600;
 
@@ -1011,6 +980,8 @@
                     renderMoreItems(entNews, 'entList', 'entLoader', 'entVisibleCount', 18, 'card-ent', 'Entertainment', 'tag-ent', 'ent');
                 } else if (activeTab === 'sportsSection' && sportsVisibleCount < sportsNews.length) {
                     renderMoreItems(sportsNews, 'sportsList', 'sportsLoader', 'sportsVisibleCount', 18, 'card-sports', 'ESPN Sports', 'tag-sports', 'sports');
+                } else if (activeTab === 'jobsSection' && jobsVisibleCount < jobNews.length) {
+                    renderMoreItems(jobNews, 'jobsList', 'jobsLoader', 'jobsVisibleCount', 18, 'card-jobs', 'Job Notice', 'tag-jobs', 'jobs');
                 }
                 setTimeout(() => { isLoading = false; }, 200);
             }
@@ -1044,10 +1015,7 @@
             loadNote();
             setInterval(updateAnalogClock, 1000);
             updateAnalogClock();
-
             loadAllFeeds();
-
-            // Refresh every 3 minutes automatically
             setInterval(loadAllFeeds, 180000);
         };
     </script>
