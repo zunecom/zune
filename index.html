@@ -283,6 +283,7 @@
             font-weight: 700;
             font-size: 1rem;
             color: var(--text-main);
+            padding: 0 2px;
         }
         .calendar-header button {
             background: transparent;
@@ -290,12 +291,27 @@
             color: var(--text-main);
             font-size: 1.3rem;
             cursor: pointer;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 8px;
             transition: background 0.2s;
         }
         .calendar-header button:hover {
             background: var(--calendar-hover);
+        }
+
+        .calendar-close {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--text-subtle);
+            cursor: pointer;
+            padding: 0 4px;
+            margin-left: 4px;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .calendar-close:hover {
+            transform: rotate(90deg);
+            color: var(--text-main);
         }
 
         .calendar-weekdays {
@@ -344,22 +360,6 @@
         }
         .calendar-day:active {
             transform: scale(0.92);
-        }
-
-        .calendar-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: transparent;
-            border: none;
-            font-size: 1.3rem;
-            color: var(--text-subtle);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .calendar-close:hover {
-            transform: rotate(90deg);
-            color: var(--text-main);
         }
 
         /* Overlay */
@@ -833,13 +833,13 @@
     <!-- Calendar Overlay -->
     <div class="calendar-overlay" id="calendarOverlay" onclick="closeCalendar()"></div>
 
-    <!-- Calendar Popup -->
+    <!-- Calendar Popup (Close button is now correctly placed inside the header) -->
     <div class="calendar-popup" id="calendarPopup">
-        <button class="calendar-close" onclick="closeCalendar()" aria-label="Close calendar">✕</button>
         <div class="calendar-header">
             <button onclick="changeMonth(-1)" aria-label="Previous month">‹</button>
             <span id="calendarMonthYear">January 2026</span>
             <button onclick="changeMonth(1)" aria-label="Next month">›</button>
+            <button class="calendar-close" onclick="closeCalendar()" aria-label="Close calendar">✕</button>
         </div>
         <div class="calendar-weekdays">
             <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
@@ -909,6 +909,7 @@
         let newsVisibleCount = 0, caVisibleCount = 0, stockVisibleCount = 0, entVisibleCount = 0, sportsVisibleCount = 0;
         let activeTab = 'caSection', isLoading = false;
         let scrollTimeout = null;
+        let refreshInterval = null; // Track the interval for clearing on unload
 
         // Calendar state
         let calendarDate = new Date(); // current view month
@@ -988,16 +989,21 @@
             savedArticles = saved ? JSON.parse(saved) : [];
         }
 
-        function toggleBookmark(item) {
-            const index = savedArticles.findIndex(a => a.link === item.link);
-            if (index > -1) {
-                savedArticles.splice(index, 1);
-            } else {
-                savedArticles.push(item);
+        function toggleBookmark(encodedItem) {
+            try {
+                const item = JSON.parse(decodeURIComponent(encodedItem));
+                const index = savedArticles.findIndex(a => a.link === item.link);
+                if (index > -1) {
+                    savedArticles.splice(index, 1);
+                } else {
+                    savedArticles.push(item);
+                }
+                localStorage.setItem('zune_bookmarks', JSON.stringify(savedArticles));
+                renderSavedArticles();
+                forceRerenderVisibleSections();
+            } catch (e) {
+                console.error('Failed to decode bookmark item', e);
             }
-            localStorage.setItem('zune_bookmarks', JSON.stringify(savedArticles));
-            renderSavedArticles();
-            forceRerenderVisibleSections();
         }
 
         function isBookmarked(link) {
@@ -1012,7 +1018,6 @@
             if (isOpen) {
                 closeCalendar();
             } else {
-                // Sync calendar view to selected date
                 calendarDate = new Date(selectedDate);
                 popup.classList.add('open');
                 overlay.classList.add('open');
@@ -1037,6 +1042,15 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const daysInPrevMonth = new Date(year, month, 0).getDate();
 
+            // Determine prev/next month/year correctly
+            let prevMonth = month - 1;
+            let prevYear = year;
+            if (prevMonth < 0) { prevMonth = 11; prevYear--; }
+
+            let nextMonth = month + 1;
+            let nextYear = year;
+            if (nextMonth > 11) { nextMonth = 0; nextYear++; }
+
             // Header
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
@@ -1051,6 +1065,9 @@
                 const cell = document.createElement('div');
                 cell.className = 'calendar-day other-month';
                 cell.textContent = day;
+                cell.dataset.day = day;
+                cell.dataset.month = prevMonth;
+                cell.dataset.year = prevYear;
                 container.appendChild(cell);
             }
 
@@ -1069,11 +1086,9 @@
                 cell.className = 'calendar-day';
                 cell.textContent = d;
 
-                // Today highlight
                 if (d === todayDate && month === todayMonth && year === todayYear) {
                     cell.classList.add('today');
                 }
-                // Selected highlight
                 if (d === selDate && month === selMonth && year === selYear) {
                     cell.classList.add('selected');
                 }
@@ -1099,6 +1114,9 @@
                 const cell = document.createElement('div');
                 cell.className = 'calendar-day other-month';
                 cell.textContent = d;
+                cell.dataset.day = d;
+                cell.dataset.month = nextMonth;
+                cell.dataset.year = nextYear;
                 container.appendChild(cell);
             }
         }
@@ -1304,10 +1322,11 @@
             const safeSummary = escapeHtml(summaryText);
             const safeLink = escapeHtml(item.link);
             const waUrl = buildWhatsAppUrl(safeTitle, safeLink);
+            const itemJson = encodeURIComponent(JSON.stringify(item));
 
             return `
                 <button class="bookmark-btn ${bookmarked ? 'saved' : ''}" 
-                        onclick='toggleBookmark(${JSON.stringify(item).replace(/'/g, "&apos;")})'
+                        onclick='toggleBookmark("${itemJson}")'
                         aria-label="${bookmarked ? 'Remove bookmark' : 'Add bookmark'}"
                         role="switch"
                         aria-checked="${bookmarked}">
@@ -1485,6 +1504,14 @@
             showError('Something went wrong. Please refresh the page.');
         });
 
+        // Fix Memory Leak - Clear the interval when leaving the page
+        window.addEventListener('beforeunload', () => {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        });
+
         // Initialize
         window.onload = () => {
             loadTheme();
@@ -1495,7 +1522,8 @@
             calendarDate = new Date(selectedDate);
             updateDateDisplay();
             loadAllFeeds();
-            setInterval(loadAllFeeds, 180000);
+            // Start the interval and keep its reference for cleanup
+            refreshInterval = setInterval(loadAllFeeds, 180000);
         };
     </script>
 </body>
