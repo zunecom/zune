@@ -45,9 +45,11 @@
             --accent-glow: rgba(16, 185, 129, 0.15);
             --accent-blue: #38bdf8;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-            --clock-face: rgba(17, 24, 39, 0.8);
             --header-bg: rgba(11, 15, 25, 0.85);
             --error-color: #fca5a5;
+            --whatsapp: #25d366;
+            --calendar-bg: rgba(19, 27, 46, 0.92);
+            --calendar-hover: rgba(56, 189, 248, 0.15);
         }
 
         body.light-theme {
@@ -61,9 +63,10 @@
             --accent-glow: rgba(5, 150, 105, 0.15);
             --accent-blue: #0284c7;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --clock-face: rgba(255, 255, 255, 0.9);
             --header-bg: rgba(255, 255, 255, 0.88);
             --error-color: #dc2626;
+            --calendar-bg: rgba(255, 255, 255, 0.92);
+            --calendar-hover: rgba(2, 132, 199, 0.1);
         }
 
         * {
@@ -222,6 +225,162 @@
             color: #ffffff;
         }
 
+        /* Date Widget */
+        .date-widget {
+            cursor: pointer;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-main);
+            transition: background 0.2s;
+            white-space: nowrap;
+            position: relative;
+        }
+        .date-widget:hover {
+            background: var(--card-hover);
+            border-color: var(--accent-blue);
+        }
+
+        /* Calendar Popup */
+        .calendar-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--calendar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px 24px 24px 24px;
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.7);
+            z-index: 2000;
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .calendar-popup.open {
+            display: block;
+            animation: calendarFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes calendarFade {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.92); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+        .calendar-header button {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .calendar-header button:hover {
+            background: var(--calendar-hover);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-subtle);
+            margin-bottom: 8px;
+            gap: 2px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            color: var(--text-main);
+        }
+        .calendar-day:hover {
+            background: var(--calendar-hover);
+        }
+        .calendar-day.other-month {
+            color: var(--text-subtle);
+            opacity: 0.5;
+        }
+        .calendar-day.today {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+        }
+        .calendar-day.selected {
+            background: var(--accent-blue);
+            color: #fff;
+            font-weight: 700;
+        }
+        .calendar-day:active {
+            transform: scale(0.92);
+        }
+
+        .calendar-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--text-subtle);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .calendar-close:hover {
+            transform: rotate(90deg);
+            color: var(--text-main);
+        }
+
+        /* Overlay */
+        .calendar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 1999;
+        }
+        .calendar-overlay.open {
+            display: block;
+            animation: overlayFade 0.2s ease;
+        }
+        @keyframes overlayFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .sticky-drawer {
             display: none;
             position: fixed;
@@ -282,52 +441,6 @@
             color: #0f172a;
             outline: none;
         }
-
-        .clock-widget {
-            width: 36px;
-            height: 36px;
-            background-color: var(--clock-face);
-            border: 2px solid var(--accent-blue);
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-            backdrop-filter: blur(8px);
-        }
-
-        .clock-number {
-            position: absolute;
-            font-size: 0.42rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1;
-        }
-
-        .num-12 { top: 2px; }
-        .num-3  { right: 2px; }
-        .num-6  { bottom: 2px; }
-        .num-9  { left: 2px; }
-
-        .clock-center {
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-            z-index: 10;
-        }
-
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            transform-origin: bottom;
-            border-radius: 2px;
-        }
-
-        .hour-hand { width: 2px; height: 8px; background-color: var(--text-main); }
-        .minute-hand { width: 1.5px; height: 11px; background-color: var(--accent-blue); }
-        .second-hand { width: 1px; height: 13px; background-color: #f43f5e; }
 
         .section-nav {
             display: grid;
@@ -617,6 +730,23 @@
             color: var(--accent-blue);
             text-decoration: none;
             font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .share-wa {
+            color: var(--whatsapp);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0 4px;
+            transition: transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .share-wa:hover {
+            transform: scale(1.2);
         }
 
         .loading-sentinel {
@@ -632,7 +762,6 @@
             color: var(--error-color);
         }
 
-        /* Skeleton loading animation */
         .skeleton {
             background: linear-gradient(90deg, var(--card-bg) 25%, var(--card-hover) 50%, var(--card-bg) 75%);
             background-size: 200% 100%;
@@ -657,14 +786,14 @@
             width: 100%;
         }
 
-        /* Responsive Layout Updates */
         @media (max-width: 600px) {
             header { padding: 8px 10px; }
             .header-content { gap: 6px; }
             .logo { font-size: 1.2rem; }
             .action-btn { padding: 5px 10px; font-size: 0.72rem; }
-            .clock-widget { width: 32px; height: 32px; }
             .section-nav { grid-template-columns: repeat(2, 1fr); }
+            .date-widget { font-size: 0.7rem; padding: 4px 10px; }
+            .calendar-popup { width: 280px; padding: 16px; }
         }
 
         @media (min-width: 601px) and (max-width: 1024px) {
@@ -693,19 +822,30 @@
             <div class="header-right">
                 <button class="action-btn icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">☀️</button>
                 <div class="live-indicator" title="Live Updates Active"><div class="live-dot"></div></div>
-                <div class="clock-widget">
-                    <div class="clock-number num-12">12</div>
-                    <div class="clock-number num-3">3</div>
-                    <div class="clock-number num-6">6</div>
-                    <div class="clock-number num-9">9</div>
-                    <div class="clock-center"></div>
-                    <div class="hand hour-hand" id="hourHand"></div>
-                    <div class="hand minute-hand" id="minuteHand"></div>
-                    <div class="hand second-hand" id="secondHand"></div>
+                <!-- Date Widget -->
+                <div class="date-widget" id="dateWidget" onclick="toggleCalendar()" title="Click to open calendar">
+                    <span id="dateDisplay">📅 </span>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Calendar Overlay -->
+    <div class="calendar-overlay" id="calendarOverlay" onclick="closeCalendar()"></div>
+
+    <!-- Calendar Popup -->
+    <div class="calendar-popup" id="calendarPopup">
+        <button class="calendar-close" onclick="closeCalendar()" aria-label="Close calendar">✕</button>
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)" aria-label="Previous month">‹</button>
+            <span id="calendarMonthYear">January 2026</span>
+            <button onclick="changeMonth(1)" aria-label="Next month">›</button>
+        </div>
+        <div class="calendar-weekdays">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        </div>
+        <div class="calendar-days" id="calendarDays"></div>
+    </div>
 
     <div class="section-nav">
         <button class="nav-tab tab-ca active" onclick="switchSection('caSection', this, 'Current Affairs')">📌 Current Affairs</button>
@@ -770,6 +910,10 @@
         let activeTab = 'caSection', isLoading = false;
         let scrollTimeout = null;
 
+        // Calendar state
+        let calendarDate = new Date(); // current view month
+        let selectedDate = new Date(); // actual selected date
+
         const placeHolders = {
             'ca': 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop',
             'bengali': 'https://images.unsplash.com/photo-1495020689067-958852a7765e?q=80&w=600&auto=format&fit=crop',
@@ -820,14 +964,13 @@
             }
         }
 
-        // Sticky notes management
+        // Sticky notes
         function toggleStickyDrawer() { 
             document.getElementById('stickyDrawer').classList.toggle('active'); 
         }
 
         function saveNote() { 
             const note = document.getElementById('stickyNotesText').value;
-            // Sanitize before saving
             const sanitized = note.replace(/</g, '&lt;').replace(/>/g, '&gt;');
             localStorage.setItem('zune_sticky_notes', sanitized); 
         }
@@ -835,7 +978,6 @@
         function loadNote() { 
             const saved = localStorage.getItem('zune_sticky_notes'); 
             if (saved) {
-                // Decode for display
                 document.getElementById('stickyNotesText').value = saved.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             }
         }
@@ -862,14 +1004,113 @@
             return savedArticles.some(a => a.link === link);
         }
 
-        // Clock management
-        function updateAnalogClock() {
-            const now = new Date();
-            const sec = now.getSeconds(), min = now.getMinutes(), hr = now.getHours();
-            document.getElementById('secondHand').style.transform = `rotate(${(sec / 60) * 360}deg)`;
-            document.getElementById('minuteHand').style.transform = `rotate(${((min + sec / 60) / 60) * 360}deg)`;
-            document.getElementById('hourHand').style.transform = `rotate(${(((hr % 12) + min / 60) / 12) * 360}deg)`;
+        // ========== CALENDAR ==========
+        function toggleCalendar() {
+            const popup = document.getElementById('calendarPopup');
+            const overlay = document.getElementById('calendarOverlay');
+            const isOpen = popup.classList.contains('open');
+            if (isOpen) {
+                closeCalendar();
+            } else {
+                // Sync calendar view to selected date
+                calendarDate = new Date(selectedDate);
+                popup.classList.add('open');
+                overlay.classList.add('open');
+                renderCalendar();
+            }
         }
+
+        function closeCalendar() {
+            document.getElementById('calendarPopup').classList.remove('open');
+            document.getElementById('calendarOverlay').classList.remove('open');
+        }
+
+        function changeMonth(delta) {
+            calendarDate.setMonth(calendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Header
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
+
+            const container = document.getElementById('calendarDays');
+            container.innerHTML = '';
+
+            // Previous month days
+            const startOffset = firstDay;
+            for (let i = startOffset - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day other-month';
+                cell.textContent = day;
+                container.appendChild(cell);
+            }
+
+            // Current month days
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
+
+            const selDate = selectedDate.getDate();
+            const selMonth = selectedDate.getMonth();
+            const selYear = selectedDate.getFullYear();
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day';
+                cell.textContent = d;
+
+                // Today highlight
+                if (d === todayDate && month === todayMonth && year === todayYear) {
+                    cell.classList.add('today');
+                }
+                // Selected highlight
+                if (d === selDate && month === selMonth && year === selYear) {
+                    cell.classList.add('selected');
+                }
+
+                cell.dataset.day = d;
+                cell.dataset.month = month;
+                cell.dataset.year = year;
+                cell.addEventListener('click', function(e) {
+                    const day = parseInt(this.dataset.day);
+                    const m = parseInt(this.dataset.month);
+                    const y = parseInt(this.dataset.year);
+                    selectedDate = new Date(y, m, day);
+                    updateDateDisplay();
+                    closeCalendar();
+                });
+                container.appendChild(cell);
+            }
+
+            // Next month days (fill remaining grid)
+            const totalCells = startOffset + daysInMonth;
+            const remaining = (7 - (totalCells % 7)) % 7;
+            for (let d = 1; d <= remaining; d++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day other-month';
+                cell.textContent = d;
+                container.appendChild(cell);
+            }
+        }
+
+        function updateDateDisplay() {
+            const d = selectedDate;
+            const day = d.getDate();
+            const month = d.toLocaleString('default', { month: 'short' });
+            const year = d.getFullYear();
+            document.getElementById('dateDisplay').innerHTML = `📅 ${day} ${month} ${year}`;
+        }
+        // ========== END CALENDAR ==========
 
         // Section switching
         function switchSection(sectionId, btn, sectionName) {
@@ -887,7 +1128,7 @@
             checkAndLoadMore();
         }
 
-        // Enhanced fetch with retry logic
+        // Enhanced fetch with retry
         async function fetchWithRetry(url, retries = 3, timeout = 8000) {
             for (let i = 0; i < retries; i++) {
                 try {
@@ -938,7 +1179,6 @@
             });
         }
 
-        // Enhanced feed fetching with multiple fallbacks
         async function fetchGenericFeed(feed) {
             const apis = [
                 `${EXTERNAL_APIS.rss2json}?rss_url=${encodeURIComponent(feed.url)}&nocache=${Date.now()}`,
@@ -951,7 +1191,6 @@
                     const res = await fetchWithRetry(api, 2, 6000);
                     if (res.ok) {
                         const text = await res.text();
-                        // Try JSON first
                         try {
                             const data = JSON.parse(text);
                             if (data && data.status === 'ok' && data.items && data.items.length > 0) {
@@ -965,7 +1204,6 @@
                                 }));
                             }
                         } catch (e) {
-                            // Then try XML
                             const parser = new DOMParser();
                             const xmlDoc = parser.parseFromString(text, "text/xml");
                             const items = Array.from(xmlDoc.querySelectorAll("item"));
@@ -1049,6 +1287,11 @@
             }
         }
 
+        function buildWhatsAppUrl(title, link) {
+            const text = `📰 *${title}*%0A%0ARead more: ${link}`;
+            return `https://api.whatsapp.com/send?text=${text}`;
+        }
+
         function createNewsCardHTML(item, cardClass, tagLabel, tagClass, catKey) {
             let cleanDesc = item.description ? item.description.replace(/<[^>]*>?/gm, '').trim() : '';
             let words = cleanDesc.split(/\s+/);
@@ -1056,11 +1299,11 @@
             const imgSrc = item.image ? item.image : placeHolders[catKey];
             const bookmarked = isBookmarked(item.link);
 
-            // Sanitize all text outputs
             const safeTitle = escapeHtml(item.title);
             const safeSource = escapeHtml(item.source);
             const safeSummary = escapeHtml(summaryText);
             const safeLink = escapeHtml(item.link);
+            const waUrl = buildWhatsAppUrl(safeTitle, safeLink);
 
             return `
                 <button class="bookmark-btn ${bookmarked ? 'saved' : ''}" 
@@ -1086,7 +1329,10 @@
                     </div>
                     <div class="news-date">
                         <span>🕒 ${formatDate(item.pubDate)}</span>
-                        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="news-link">Read →</a>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="share-wa" aria-label="Share on WhatsApp">📱</a>
+                            <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="news-link">Read →</a>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1223,7 +1469,7 @@
             loadAllFeeds();
         }
 
-        // Debounced scroll handler
+        // Debounced scroll
         window.onscroll = () => {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(checkAndLoadMore, 100);
@@ -1234,21 +1480,22 @@
             scrollTimeout = setTimeout(checkAndLoadMore, 100);
         };
 
-        // Global error handler
         window.addEventListener('error', (e) => {
             console.error('Global error:', e.message);
             showError('Something went wrong. Please refresh the page.');
         });
 
-        // Initialize app
+        // Initialize
         window.onload = () => {
             loadTheme();
             loadNote();
             loadBookmarks();
-            setInterval(updateAnalogClock, 1000);
-            updateAnalogClock();
+            // Set today's date
+            selectedDate = new Date();
+            calendarDate = new Date(selectedDate);
+            updateDateDisplay();
             loadAllFeeds();
-            setInterval(loadAllFeeds, 180000); // Refresh every 3 minutes
+            setInterval(loadAllFeeds, 180000);
         };
     </script>
 </body>
